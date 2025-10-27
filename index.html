@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./style/style.css" />
+    <title>XO Game</title>
+  </head>
+  <body>
+    <div class="overlay"></div>
+    <h1>XO Game</h1>
+    <div class="start-game">
+      <h2>Create Account</h2>
+      <div class="players">
+        <div class="active">Player One</div>
+        <div>Player Two</div>
+      </div>
+      <form action="#">
+        <div>
+          <label for="name">Name  : </label>
+          <input type="text" name="name" id="name" placeholder="Your Name">
+          <span class="warning">Do not use any Spacial character (!,&,%,*,#...)</span>
+        </div>
+        <div>
+          <label for="password">Password  : </label>
+          <input type="password" name="password" id="password" placeholder="Your Password">
+          <span class="warning">Your password should contain (Big character,Number,Special character)</span>
+        </div>
+        <div class="active">
+          <p>Profile : </p>
+          <div class="emoji-container">
+            <img src="./imgs/(1).png" alt="face">
+            <img src="./imgs/(2).png" alt="face">
+            <img src="./imgs/(3).png" alt="face">
+            <img src="./imgs/(4).png" alt="face">
+            <img src="./imgs/(5).png" alt="face">
+            <img src="./imgs/(6).png" alt="face">
+            <img src="./imgs/(7).png" alt="face">
+            <img src="./imgs/(8).png" alt="face">
+            <img src="./imgs/(9).png" alt="face">
+            <img src="./imgs/(10).png" alt="face">
+          </div>
+        </div>
+      </form>
+      <button>Reset</button>
+      <button>Next</button>
+      <div>Log In</div>
+    </div>
+
+    <div class="players-account">
+      <div class="first-player"><span>+</span></div>
+      <div class="second-player"><span>+</span></div>
+    </div>
+    <div class="container">
+      <div class="box"></div>
+      <div class="box"></div>
+      <div class="box"></div>
+      <div class="box"></div>
+      <div class="box"></div>
+      <div class="box"></div>
+      <div class="box"></div>
+      <div class="box"></div>
+      <div class="box"></div>
+    </div>
+    <script src="./script/script.js"></script>
+  </body>
+</html>
