@@ -1,25 +1,28 @@
-const body = document.body;
 const boxes = document.querySelectorAll(".box");
 const emojiContainer = document.querySelector(".emoji-container");
-const playerOne = document.querySelector(
-  ".start-game .players div:first-child"
-);
-const playerTwo = playerOne.nextElementSibling;
+const playerAccount = document.querySelector(".start-game .player");
 const form = document.querySelector(".start-game form");
 const account = document.querySelector(".start-game > div:last-child");
 const resetBtn = form.nextElementSibling;
 const nextBtn = resetBtn.nextElementSibling;
+const firstPlayer = document.querySelector(".first-player");
+const secondPlayer = firstPlayer.nextElementSibling;
+const startGame = document.querySelector(".start-game")
 
-playerOne.addEventListener("click", () => {
-  focusOnPlayer(playerTwo, playerOne, "#1496bc");
+let player;
+firstPlayer.addEventListener("click", () => {
+  player = firstPlayer;
+  startGame.style.top = "50%";
+  focusOnPlayer("#1496bc");
 });
-playerTwo.addEventListener("click", () => {
-  focusOnPlayer(playerOne, playerTwo, "#c05151");
+secondPlayer.addEventListener("click", () => {
+  player = secondPlayer;
+  startGame.style.top = "50%";
+  focusOnPlayer("#c05151");
 });
 
-function focusOnPlayer(firstPlayer, secondPlayer, playerClr) {
-  firstPlayer.classList.remove("active");
-  secondPlayer.classList.add("active");
+function focusOnPlayer(playerClr) {
+  playerAccount.style.backgroundColor = playerClr;
   form.style.backgroundColor = playerClr;
   nextBtn.style.backgroundColor = playerClr;
   resetBtn.style.backgroundColor = playerClr;
@@ -28,11 +31,14 @@ function focusOnPlayer(firstPlayer, secondPlayer, playerClr) {
 
 let isNameCorrect = false;
 let isPasswordCorrect = false;
+let checkPattern = true;
 
 let [playerName, password] = form.querySelectorAll("input");
 playerName.addEventListener("input", () => {
+  if (!checkPattern) return;
+  playerAccount.lastElementChild.innerHTML = playerName.value;
   let nameReg = /^[a-zA-Z]{2,}(?:\s{1,4}[a-zA-Z]{2,})*$/i;
-  if (nameReg.test(playerName.value)) {
+  if (nameReg.test(playerName.value.trim())) {
     form.firstElementChild.lastElementChild.style.display = "none";
     isNameCorrect = true;
   } else {
@@ -42,8 +48,9 @@ playerName.addEventListener("input", () => {
 });
 
 password.addEventListener("input", () => {
+  if (!checkPattern) return;
   let passReg = /^(?=.*[a-z])(?=.*\d)(?=.*[^\w\s]).{8,20}$/i;
-  if (passReg.test(password.value)) {
+  if (passReg.test(password.value.trim())) {
     form.children[1].lastElementChild.style.display = "none";
     isPasswordCorrect = true;
   } else {
@@ -52,38 +59,22 @@ password.addEventListener("input", () => {
   }
 });
 
-let isFirstPlayerSignin = false;
-let isSecondPlayerSignin = false;
 nextBtn.addEventListener("click", () => {
-  if (!(isNameCorrect && isPasswordCorrect)) return;
+  if (!(isPasswordCorrect && isNameCorrect) && checkPattern) return;
+  if (password.value.trim() == "" || playerName.value.trim() == "") return;
   let portfolio = document.createElement("img");
   let name = document.createElement("h3");
   let emoji = emojiContainer.querySelector(".active");
   portfolio.src = emoji?.src || "./imgs/(1).png";
   name.innerHTML = playerName.value;
 
-  if (playerOne.classList.contains("active")) {
-    playerOne.innerHTML = "";
-    playerOne.append(portfolio, name);
-    isFirstPlayerSignin = true;
-    if (!isSecondPlayerSignin) playerTwo.click();
-  } else {
-    playerTwo.innerHTML = "";
-    playerTwo.append(portfolio, name);
-    isSecondPlayerSignin = true;
-    if (!isFirstPlayerSignin) playerOne.click();
-  }
-
+  player.innerHTML = "";
+  player.append(portfolio, name);
+  startGame.style.top = "-50%";
   isPasswordCorrect = false;
   isNameCorrect = false;
   resetBtn.click();
 
-  if (isFirstPlayerSignin && isSecondPlayerSignin) {
-    let container = document.querySelector(".start-game")
-    container.style.width = 0;
-    container.style.padding = 0;
-    container.style.border = 0;
-  }
 });
 
 resetBtn.addEventListener("click", () => {
@@ -97,9 +88,11 @@ account.addEventListener("click", () => {
 
   if (profileEmoji.classList.contains("active")) {
     profileEmoji.classList = "";
-    document.querySelector(".start-game h2").innerHTML = "Log IN";
+    document.querySelector(".start-game h2").innerHTML = "Log In";
     account.innerHTML = "Create Account";
+    checkPattern = false;
   } else {
+    checkPattern = true;
     profileEmoji.classList = "active";
     document.querySelector(".start-game h2").innerHTML = "Create Account";
     account.innerHTML = "Log In";
@@ -112,6 +105,7 @@ account.addEventListener("click", () => {
       icon.className = "";
     });
     icon.className = "active";
+    playerAccount.firstElementChild.src = icon.src;
   });
 });
 
@@ -142,8 +136,9 @@ document.addEventListener("click", (ele) => {
       O.style.backgroundColor = "white";
 
       if (playerClr == lastMove) {
-        popup.style.backgroundColor = "#283ecf";
-        popup.classList.add("change-clr");
+        popup.classList.add("first-player-clr");
+      } else {
+        popup.classList.add("second-player-clr");
       }
 
       X.textContent = "❌";
@@ -218,7 +213,10 @@ function gameEndPopup(winner) {
   document.body.append(container);
 
   button.addEventListener("click", () => {
-    boxes.forEach((box) => (box.innerHTML = ""));
+    boxes.forEach((box) => {
+      box.innerHTML = ""
+      box.classList.remove("full")
+    });
     container.remove();
   });
 }

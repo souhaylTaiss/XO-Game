@@ -69,7 +69,6 @@ h1 {
 }
 
 .start-game {
-  width: 600px;
   background-color: white;
   border: 2px solid #00cc43;
   border-radius: 5px;
@@ -77,7 +76,7 @@ h1 {
   display: flex;
   flex-direction: column;
   position: absolute;
-  top: 50%;
+  top: -50%;
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 999;
@@ -85,48 +84,26 @@ h1 {
   overflow: hidden;
   transition: 0.3s;
 }
-.start-game .players {
-  display: flex;
-  gap: 160px;
-  font-weight: bold;
-  text-transform: uppercase;
-  margin-bottom: 24px;
-  margin-top: 29px;
-}
-.start-game .players > div {
-  height: 30px;
-  position: relative;
-  cursor: pointer;
+.start-game .player {
+  min-width: 145px;
   display: flex;
   align-items: center;
   gap: 8px;
+  background: #1496bc;
+  padding: 4px 15px 4px 4px;
+  border-radius: 26px;
+  color: white;
+  margin: 14px;
 }
-.start-game .players > div img {
-  height: 40px;
-  width: 40px;
+.start-game .player img {
+  height: 35px;
+  width: 35px;
   border-radius: 50%;
-  background-color: #d7d7d7;
+  background-color: #fff;
   padding: 3px;
 }
-.start-game .players > div h3 {
+.start-game .player h3 {
   font-size: initial;
-}
-.start-game .players > div::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -10px;
-  height: 2px;
-  width: 0%;
-  display: block;
-  background: #1496bc;
-  transition: 0.3s;
-}
-.start-game .players > div:last-child::after {
-  background-color: #c05151;
-}
-.start-game .players .active::after {
-  width: 100%;
 }
 .start-game form {
   display: flex;
@@ -266,7 +243,7 @@ h1 {
   top: 26%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: #c05151;
+  background: #000000;
   padding: 4px;
   gap: 4px;
 }
@@ -276,9 +253,21 @@ h1 {
   border: 20px solid transparent;
   border-right-width: 10px;
   border-left-width: 10px;
-  border-top-color: #c05151;
+  border-top-color: #000000;
   left: 25px;
   bottom: -39px;
+}
+.xo-popup.first-player-clr {
+  background-color: #1496bc;
+}
+.xo-popup.first-player-clr::after {
+  border-top-color: #1496bc;
+}
+.xo-popup.second-player-clr {
+  background-color: #c05151;
+}
+.xo-popup.second-player-clr::after {
+  border-top-color: #c05151;
 }
 
 .x,
@@ -287,15 +276,11 @@ h1 {
   width: 30px;
   height: 30px;
   padding: 2px;
-  color: white;
-  background: #283ecf;
+  color: black;
+  background: #fff;
   text-align: center;
   font-size: 20px;
   border-radius: 4px;
-}
-
-.change-clr::after {
-  border-top-color: #283ecf;
 }
 
 .game-end-popup {
