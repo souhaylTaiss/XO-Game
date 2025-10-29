@@ -7,14 +7,19 @@
 body {
   transition: 0.5s;
   font-family: system-ui;
+  background-image: url(../imgs/bg.jpg);
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .overlay {
   width: 100%;
   height: 100%;
-  background-color: rgba(27, 27, 27, 0.837);
-  -webkit-backdrop-filter: blur(30px);
-          backdrop-filter: blur(30px);
+  background-color: rgba(27, 27, 27, 0.6);
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
   position: fixed;
   top: 0;
   z-index: -1;
@@ -36,7 +41,6 @@ h1 {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  cursor: pointer;
 }
 .players-account span {
   width: 100px;
@@ -45,7 +49,7 @@ h1 {
   color: white;
   font-weight: bold;
 }
-.players-account div {
+.players-account > div {
   background-color: #1496bc;
   font-size: 16px;
   width: -moz-fit-content;
@@ -56,13 +60,32 @@ h1 {
   padding: 4px 14px 4px 5px;
   justify-content: space-between;
   gap: 9px;
+  cursor: pointer;
 }
-.players-account div img {
+.players-account > div img {
   width: 40px;
   height: 40px;
   background: white;
   border-radius: 50%;
   padding: 4px;
+}
+.players-account .start-playing {
+  background-color: transparent;
+}
+.players-account .start-playing span {
+  width: -moz-fit-content;
+  width: fit-content;
+}
+.players-account .start-playing .red,
+.players-account .start-playing .blue {
+  border: 10px solid transparent;
+}
+.players-account .start-playing .blue {
+  border-right: 20px solid #1496bc;
+  opacity: 0;
+}
+.players-account .start-playing .red {
+  border-left: 20px solid #c05151;
 }
 .players-account .second-player {
   background-color: #c05151;
@@ -209,6 +232,27 @@ h1 {
   bottom: 30px;
   left: 98px;
 }
+.start-game .close-btn {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  cursor: pointer;
+}
+.start-game .close-btn::after, .start-game .close-btn::before {
+  content: "";
+  width: 2px;
+  height: 25px;
+  background-color: red;
+  transform: rotate(45deg);
+  display: block;
+}
+.start-game .close-btn::before {
+  transform: rotate(-45deg);
+}
 
 .container {
   width: 320px;
@@ -270,8 +314,8 @@ h1 {
   border-top-color: #c05151;
 }
 
-.x,
-.o {
+.x-shape,
+.o-shape {
   cursor: pointer;
   width: 30px;
   height: 30px;
@@ -312,4 +356,17 @@ h1 {
   bottom: 10px;
   transform: translateX(-50%);
   cursor: pointer;
+}
+
+.sign-in-msg {
+  padding: 10px 19px;
+  background-color: rgba(0, 0, 0, 0.419);
+  color: white;
+  position: absolute;
+  top: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 16px;
+  text-transform: uppercase;
+  transition: 0.4s;
 }/*# sourceMappingURL=style.css.map */

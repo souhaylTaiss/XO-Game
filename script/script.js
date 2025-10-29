@@ -6,19 +6,54 @@ const account = document.querySelector(".start-game > div:last-child");
 const resetBtn = form.nextElementSibling;
 const nextBtn = resetBtn.nextElementSibling;
 const firstPlayer = document.querySelector(".first-player");
-const secondPlayer = firstPlayer.nextElementSibling;
-const startGame = document.querySelector(".start-game")
+const secondPlayer = document.querySelector(".second-player");
+const startGame = document.querySelector(".start-game");
+const warningNameMsg = form.firstElementChild.lastElementChild;
+const warningPassMsg = form.children[1].lastElementChild;
+const closeBtn = document.querySelector(".close-btn");
+const leftArrow = document.querySelector(".blue");
+const rightArrow = document.querySelector(".red");
+
+console.log(localStorage["First Player"]);
+if (localStorage["First Player"] != null) {
+  putSignedInPlayer(["First Player"], firstPlayer);
+}
+if (localStorage["Second Player"] != null) {
+  putSignedInPlayer(["Second Player"], secondPlayer);
+}
+
+function putSignedInPlayer(key, player) {
+  let localPlayerData = JSON.parse(localStorage.getItem("players Data")) || [];
+  for (let i = 0; i < localPlayerData.length; i++) {
+    if (localPlayerData[i].username == localStorage[key]) {
+      let profileImg = document.createElement("img");
+      let name = document.createElement("h3");
+      profileImg.src = localPlayerData[i].profile;
+      name.innerHTML = localPlayerData[i].username;
+      player.innerHTML = "";
+      player.append(profileImg, name);
+    }
+  }
+  player.classList.add("full");
+}
 
 let player;
 firstPlayer.addEventListener("click", () => {
   player = firstPlayer;
+  playerAccount.lastElementChild.innerHTML = "Player One";
   startGame.style.top = "50%";
   focusOnPlayer("#1496bc");
 });
 secondPlayer.addEventListener("click", () => {
   player = secondPlayer;
+  playerAccount.lastElementChild.innerHTML = "Player Two";
   startGame.style.top = "50%";
   focusOnPlayer("#c05151");
+});
+
+closeBtn.addEventListener("click", () => {
+  startGame.style.top = "-50%";
+  resetBtn.click();
 });
 
 function focusOnPlayer(playerClr) {
@@ -26,6 +61,7 @@ function focusOnPlayer(playerClr) {
   form.style.backgroundColor = playerClr;
   nextBtn.style.backgroundColor = playerClr;
   resetBtn.style.backgroundColor = playerClr;
+  resetBtn.click();
   account.style.color = playerClr;
 }
 
@@ -34,16 +70,19 @@ let isPasswordCorrect = false;
 let checkPattern = true;
 
 let [playerName, password] = form.querySelectorAll("input");
+
 playerName.addEventListener("input", () => {
-  if (!checkPattern) return;
   playerAccount.lastElementChild.innerHTML = playerName.value;
+  if (!checkPattern) return;
   let nameReg = /^[a-zA-Z]{2,}(?:\s{1,4}[a-zA-Z]{2,})*$/i;
   if (nameReg.test(playerName.value.trim())) {
-    form.firstElementChild.lastElementChild.style.display = "none";
+    warningNameMsg.style.display = "none";
     isNameCorrect = true;
   } else {
+    warningNameMsg.style.display = "block";
+    warningNameMsg.innerHTML =
+      "Do not use any Spacial character (!,&,%,*,#...)";
     isNameCorrect = false;
-    form.firstElementChild.lastElementChild.style.display = "block";
   }
 });
 
@@ -51,44 +90,112 @@ password.addEventListener("input", () => {
   if (!checkPattern) return;
   let passReg = /^(?=.*[a-z])(?=.*\d)(?=.*[^\w\s]).{8,20}$/i;
   if (passReg.test(password.value.trim())) {
-    form.children[1].lastElementChild.style.display = "none";
+    warningPassMsg.style.display = "none";
     isPasswordCorrect = true;
   } else {
+    warningPassMsg.innerHTML =
+      "Your password should contain (Big character,Number,Special character)";
+    warningPassMsg.style.display = "block";
     isPasswordCorrect = false;
-    form.children[1].lastElementChild.style.display = "block";
   }
 });
 
 nextBtn.addEventListener("click", () => {
-  if (!(isPasswordCorrect && isNameCorrect) && checkPattern) return;
-  if (password.value.trim() == "" || playerName.value.trim() == "") return;
-  let portfolio = document.createElement("img");
+  let profileImg = document.createElement("img");
   let name = document.createElement("h3");
-  let emoji = emojiContainer.querySelector(".active");
-  portfolio.src = emoji?.src || "./imgs/(1).png";
-  name.innerHTML = playerName.value;
+  let selectedImg = emojiContainer.querySelector(".active");
+
+  if (checkPattern) {
+    if (!(isPasswordCorrect && isNameCorrect)) return;
+    if (singUp(selectedImg)) return;
+
+    name.innerHTML = playerName.value;
+    profileImg.src = selectedImg?.src || "./imgs/(1).png";
+    isPasswordCorrect = false;
+    isNameCorrect = false;
+    if (player == firstPlayer) {
+      localStorage.setItem("First Player", playerName.value.trim());
+    } else {
+      localStorage.setItem("Second Player", playerName.value.trim());
+    }
+  } else if (singIn()) {
+    let playerData = singIn();
+    name.innerHTML = playerData.username;
+    profileImg.src = playerData.profile;
+    if (player == firstPlayer) {
+      localStorage.setItem("First Player", playerName.value.trim());
+    } else {
+      localStorage.setItem("Second Player", playerName.value.trim());
+    }
+  } else return;
 
   player.innerHTML = "";
-  player.append(portfolio, name);
+  player.append(profileImg, name);
+  player.classList.add("full");
   startGame.style.top = "-50%";
-  isPasswordCorrect = false;
-  isNameCorrect = false;
   resetBtn.click();
-
 });
+
+function singUp(profileImg) {
+  let localPlayerData = JSON.parse(localStorage.getItem("players Data")) || [];
+
+  for (let i = 0; i < localPlayerData.length; i++) {
+    if (localPlayerData[i].username == playerName.value.trim()) {
+      warningNameMsg.innerHTML = "The username is already used";
+      warningNameMsg.style.display = "block";
+      return true;
+    }
+  }
+
+  let newPlayer = {
+    username: playerName.value.trim(),
+    password: password.value.trim(),
+    profile: profileImg?.src || "./imgs/(1).png",
+  };
+  localPlayerData.push(newPlayer);
+  localStorage.setItem("players Data", JSON.stringify(localPlayerData));
+  return false;
+}
+
+function singIn() {
+  let localPlayerData = JSON.parse(localStorage.getItem("players Data")) || [];
+
+  for (let i = 0; i < localPlayerData.length; i++) {
+    if (localPlayerData[i].username == playerName.value.trim()) {
+      warningNameMsg.style.display = "none";
+      if (localPlayerData[i].password == password.value.trim()) {
+        warningPassMsg.style.display = "none";
+        return localPlayerData[i];
+      } else {
+        warningPassMsg.innerHTML = "The password is incorrect!";
+        warningPassMsg.style.display = "block";
+        return false;
+      }
+    } else if (i == localPlayerData.length - 1) {
+      warningNameMsg.innerHTML = "The username doesn't exist";
+      warningNameMsg.style.display = "block";
+      return false;
+    }
+  }
+}
 
 resetBtn.addEventListener("click", () => {
   let [name, password] = form.querySelectorAll("input");
   name.value = "";
   password.value = "";
+  [...emojiContainer.children].forEach((icon) => {
+    icon.className = "";
+  });
 });
 
 account.addEventListener("click", () => {
   let profileEmoji = form.lastElementChild;
 
   if (profileEmoji.classList.contains("active")) {
+    warningNameMsg.style.display = "none";
+    warningPassMsg.style.display = "none";
     profileEmoji.classList = "";
-    document.querySelector(".start-game h2").innerHTML = "Log In";
+    document.querySelector(".start-game h2").innerHTML = "Sign In";
     account.innerHTML = "Create Account";
     checkPattern = false;
   } else {
@@ -110,71 +217,118 @@ account.addEventListener("click", () => {
 });
 
 let isFirstMove = true;
-let lastMove;
-let playerClr;
-
+let nextMove;
+let isFirstPlayerTurn;
+// Create XO popup in box
 document.addEventListener("click", (ele) => {
-  if (ele.target.className == "full") return;
-  if (ele.target.className == "box") {
-    boxes.forEach((box) => {
-      if (box.children.length > 0) box.children[0].remove();
-    });
+  let element = ele.target;
+  let singInMsg = document.querySelector(".sign-in-msg");
+  let isItFull =
+    firstPlayer.classList.contains("full") &&
+    secondPlayer.classList.contains("full");
 
-    let popup = document.createElement("div");
-    let X = document.createElement("div");
-    let O = document.createElement("div");
+  if (!isItFull) {
+    singInMsg.style.top = "20px";
+    return;
+  } else singInMsg.style.top = "-45px";
 
-    popup.className = "xo-popup";
-    X.className = "x";
-    O.className = "o";
-
-    if (isFirstMove) {
-      X.textContent = "X";
-      O.textContent = "O";
-    } else {
-      X.style.backgroundColor = "white";
-      O.style.backgroundColor = "white";
-
-      if (playerClr == lastMove) {
-        popup.classList.add("first-player-clr");
-      } else {
-        popup.classList.add("second-player-clr");
-      }
-
-      X.textContent = "❌";
-      O.textContent = "✔️";
-    }
-    popup.append(X, O);
-    ele.target.append(popup);
+  if (element.className == "full") return;
+  if (element.className == "box") {
+    createPopup(element);
   }
 });
 
-document.addEventListener("click", (ele) => {
-  let isTarget = ele.target.className == "x" || ele.target.className == "o";
-  if (!isTarget) return;
+function createPopup(box) {
+  boxes.forEach((box) => {
+    if (box.children.length > 0) box.children[0].remove();
+  });
 
-  let box = ele.target.parentElement.parentElement;
+  let popup = document.createElement("div");
+  let X = document.createElement("div");
+  let O = document.createElement("div");
+  popup.className = "xo-popup";
+  X.className = "x-shape";
+  O.className = "o-shape";
+
+  X.textContent = "❌";
+  O.textContent = "✔️";
+
+  if (isFirstPlayerTurn) {
+    popup.classList.add("first-player-clr");
+  } else {
+    popup.classList.add("second-player-clr");
+  }
 
   if (isFirstMove) {
-    box.innerHTML = ele.target.className == "x" ? "X" : "O";
-    playerClr = ele.target.className;
-    lastMove = ele.target.className == "x" ? "x" : "o";
+    X.textContent = "X";
+    O.textContent = "O";
+  }
+  popup.append(X, O);
+  box.append(popup);
+}
+
+// Put What Player choose
+let firstPlayerShape;
+let secondPlayerShape;
+
+document.addEventListener("click", (ele) => {
+  let isTarget = ele.target.classList.contains("x-shape") || ele.target.classList.contains("o-shape");
+  if (!isTarget) return;
+
+  let XOBox = ele.target;
+  let box = XOBox.parentElement.parentElement;
+
+  if (isFirstMove) {
+    box.innerHTML = XOBox.innerHTML;
+    choosePlayersShape(XOBox)
+    changeArrowDirection()
+
     box.classList.add("full");
     isFirstMove = false;
+    isFirstPlayerTurn = !isFirstPlayerTurn;
     return;
   }
 
-  if (ele.target.className == "x") {
-    ele.target.parentElement.remove();
+  if (XOBox.className == "x-shape") {
+    XOBox.parentElement.remove();
     return;
   }
 
-  box.innerHTML = lastMove == "x" ? "O" : "X";
-  lastMove = lastMove == "x" ? "o" : "x";
+  changeArrowDirection();
+
   box.classList.add("full");
-  isItWinner(lastMove);
+  box.innerHTML = isFirstPlayerTurn ? firstPlayerShape : secondPlayerShape;
+  isFirstPlayerTurn = !isFirstPlayerTurn;
+  isItWinner(box.innerHTML);
 });
 
+function chooseWhoWillStart() {
+  let randomNum = Math.round(Math.random() * 1);
+  leftArrow.style.opacity = 0;
+  rightArrow.style.opacity = 0;
+  [leftArrow, rightArrow][randomNum].style.opacity = 1;
+  isFirstPlayerTurn = [true, false][randomNum];
+}
+chooseWhoWillStart();
+
+function choosePlayersShape(XOBox) {
+  if (isFirstPlayerTurn) {
+      firstPlayerShape = XOBox.classList.contains("x-shape") ? "X" : "O";
+      secondPlayerShape = firstPlayerShape == "X" ? "O" : "X";
+    } else {
+      secondPlayerShape = XOBox.classList.contains("x-shape") ? "X" : "O";
+      firstPlayerShape = secondPlayerShape == "X" ? "O" : "X";
+    }
+}
+function changeArrowDirection() {
+  if (isFirstPlayerTurn) {
+    leftArrow.style.opacity = 0;
+    rightArrow.style.opacity = 1;
+  } else {
+    rightArrow.style.opacity = 0;
+    leftArrow.style.opacity = 1;
+  }
+}
 const options = [
   [1, 2, 3],
   [4, 5, 6],
@@ -185,19 +339,31 @@ const options = [
   [1, 5, 9],
   [3, 5, 7],
 ];
-function isItWinner(lastMove) {
+
+function isItWinner(shape) {
   for (let i = 0; i < options.length; i++) {
     let counter = 0;
     for (let j = 0; j < 3; j++) {
-      if (boxes[options[i][j] - 1].textContent.toLowerCase() === lastMove)
+      if (
+        boxes[options[i][j] - 1].textContent.toLowerCase() ===
+        shape.toLowerCase()
+      )
         counter++;
-
       if (counter == 3) {
-        gameEndPopup(lastMove);
+        gameEndPopup(
+          (isFirstPlayerTurn ? firstPlayer : secondPlayer).lastElementChild
+            .innerHTML
+        );
         return;
       }
     }
   }
+
+  let fullBoxes = 0;
+  for (let i = 0; i < boxes.length; i++) {
+    if (boxes[i].classList.contains("full")) fullBoxes++;
+  }
+  if (fullBoxes == 9) gameEndPopup(null);
 }
 
 function gameEndPopup(winner) {
@@ -205,8 +371,12 @@ function gameEndPopup(winner) {
   let header = document.createElement("h2");
   let button = document.createElement("button");
 
+  if (winner) {
+    header.innerHTML = `The Winner is: ${winner}`;
+  } else {
+    header.innerHTML = `It's A Draw!`;
+  }
   container.className = "game-end-popup";
-  header.innerHTML = `The Winner is: ${winner}`;
   button.innerHTML = "Play Again";
 
   container.append(header, button);
@@ -214,9 +384,10 @@ function gameEndPopup(winner) {
 
   button.addEventListener("click", () => {
     boxes.forEach((box) => {
-      box.innerHTML = ""
-      box.classList.remove("full")
+      box.innerHTML = "";
+      box.classList.remove("full");
     });
+    isFirstMove = true;
     container.remove();
   });
 }

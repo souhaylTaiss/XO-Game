@@ -6,12 +6,21 @@
 body {
   transition: 0.5s;
   font-family: system-ui;
+  background: {
+    image : url(../imgs/bg.jpg);
+    attachment : fixed;
+    position: center;
+    repeat: no-repeat;
+    size: cover;
+  };
+
 }
 .overlay {
   width: 100%;
   height: 100%;
-  background-color: rgba(27, 27, 27, 0.837);
-  backdrop-filter: blur(30px);
+  background-color: rgb(27 27 27 / 60%);
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
   position: fixed;
   top: 0;
   z-index: -1;
@@ -31,7 +40,6 @@ h1 {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  cursor: pointer;
   span {
     width: 100px;
     text-align: center;
@@ -39,7 +47,7 @@ h1 {
     color: white;
     font-weight: bold;
   }
-  div {
+  > div {
     background-color: #1496bc;
     font-size: 16px;
     width: fit-content;
@@ -49,12 +57,30 @@ h1 {
     padding: 4px 14px 4px 5px;
     justify-content: space-between;
     gap: 9px;
+    cursor: pointer;
     img {
       width: 40px;
       height: 40px;
       background: white;
       border-radius: 50%;
       padding: 4px;
+    }
+  }
+  .start-playing {
+    background-color: transparent;
+    span {
+      width: fit-content;
+    }
+    .red,
+    .blue {
+      border: 10px solid transparent;
+    }
+    .blue {
+      border-right: 20px solid #1496bc;
+      opacity: 0;
+    }
+    .red {
+      border-left: 20px solid #c05151;
     }
   }
   .second-player {
@@ -78,7 +104,6 @@ h1 {
   transition: 0.3s;
   .player {
     min-width: 145px;
-
     display: flex;
     align-items: center;
     gap: 8px;
@@ -205,6 +230,28 @@ h1 {
       left: 98px;
     }
   }
+  .close-btn {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    cursor: pointer;
+    &::after,
+    &::before {
+      content: "";
+      width: 2px;
+      height: 25px;
+      background-color: red;
+      transform: rotate(45deg);
+      display: block;
+    }
+    &::before {
+      transform: rotate(-45deg);
+    }
+  }
 }
 .container {
   width: 320px;
@@ -264,8 +311,8 @@ h1 {
     }
   }
 }
-.x,
-.o {
+.x-shape,
+.o-shape {
   cursor: pointer;
   width: 30px;
   height: 30px;
@@ -306,4 +353,16 @@ h1 {
     transform: translateX(-50%);
     cursor: pointer;
   }
+}
+.sign-in-msg {
+  padding: 10px 19px;
+  background-color: rgba(0, 0, 0, 0.419);
+  color: white;
+  position: absolute;
+  top: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 16px;
+  text-transform: uppercase;
+  transition: 0.4s;
 }
