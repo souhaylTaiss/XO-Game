@@ -14,16 +14,16 @@ const closeBtn = document.querySelector(".close-btn");
 const leftArrow = document.querySelector(".blue");
 const rightArrow = document.querySelector(".red");
 
-console.log(localStorage["First Player"]);
-if (localStorage["First Player"] != null) {
-  putSignedInPlayer(["First Player"], firstPlayer);
+console.log(localStorage.FirstPlayer);
+if (localStorage.FirstPlayer != null) {
+  putSignedInPlayer("FirstPlayer", firstPlayer);
 }
-if (localStorage["Second Player"] != null) {
-  putSignedInPlayer(["Second Player"], secondPlayer);
+if (localStorage.FirstPlayer != null) {
+  putSignedInPlayer("SecondPlayer", secondPlayer);
 }
 
 function putSignedInPlayer(key, player) {
-  let localPlayerData = JSON.parse(localStorage.getItem("players Data")) || [];
+  let localPlayerData = JSON.parse(localStorage.PlayersData) || [];
   for (let i = 0; i < localPlayerData.length; i++) {
     if (localPlayerData[i].username == localStorage[key]) {
       let profileImg = document.createElement("img");
@@ -114,18 +114,18 @@ nextBtn.addEventListener("click", () => {
     isPasswordCorrect = false;
     isNameCorrect = false;
     if (player == firstPlayer) {
-      localStorage.setItem("First Player", playerName.value.trim());
+      localStorage.FirstPlayer = playerName.value.trim();
     } else {
-      localStorage.setItem("Second Player", playerName.value.trim());
+      localStorage.SecondPlayer = playerName.value.trim();
     }
   } else if (singIn()) {
     let playerData = singIn();
     name.innerHTML = playerData.username;
     profileImg.src = playerData.profile;
     if (player == firstPlayer) {
-      localStorage.setItem("First Player", playerName.value.trim());
+      localStorage.FirstPlayer = playerName.value.trim();
     } else {
-      localStorage.setItem("Second Player", playerName.value.trim());
+      localStorage.SecondPlayer = playerName.value.trim();
     }
   } else return;
 
@@ -137,7 +137,10 @@ nextBtn.addEventListener("click", () => {
 });
 
 function singUp(profileImg) {
-  let localPlayerData = JSON.parse(localStorage.getItem("players Data")) || [];
+  let localPlayerData;
+  if (localStorage.PlayersData) {
+    localPlayerData = JSON.parse(localStorage.PlayersData);
+  } else localPlayerData = [];
 
   for (let i = 0; i < localPlayerData.length; i++) {
     if (localPlayerData[i].username == playerName.value.trim()) {
@@ -153,12 +156,12 @@ function singUp(profileImg) {
     profile: profileImg?.src || "./imgs/(1).png",
   };
   localPlayerData.push(newPlayer);
-  localStorage.setItem("players Data", JSON.stringify(localPlayerData));
+  localStorage.PlayersData = JSON.stringify(localPlayerData);
   return false;
 }
 
 function singIn() {
-  let localPlayerData = JSON.parse(localStorage.getItem("players Data")) || [];
+  let localPlayerData = JSON.parse(localStorage.getItem(PlayersData)) || [];
 
   for (let i = 0; i < localPlayerData.length; i++) {
     if (localPlayerData[i].username == playerName.value.trim()) {
@@ -219,7 +222,7 @@ account.addEventListener("click", () => {
 let isFirstMove = true;
 let nextMove;
 let isFirstPlayerTurn;
-// Create XO popup in box
+
 document.addEventListener("click", (ele) => {
   let element = ele.target;
   let singInMsg = document.querySelector(".sign-in-msg");
@@ -272,7 +275,9 @@ let firstPlayerShape;
 let secondPlayerShape;
 
 document.addEventListener("click", (ele) => {
-  let isTarget = ele.target.classList.contains("x-shape") || ele.target.classList.contains("o-shape");
+  let isTarget =
+    ele.target.classList.contains("x-shape") ||
+    ele.target.classList.contains("o-shape");
   if (!isTarget) return;
 
   let XOBox = ele.target;
@@ -280,8 +285,8 @@ document.addEventListener("click", (ele) => {
 
   if (isFirstMove) {
     box.innerHTML = XOBox.innerHTML;
-    choosePlayersShape(XOBox)
-    changeArrowDirection()
+    choosePlayersShape(XOBox);
+    changeArrowDirection();
 
     box.classList.add("full");
     isFirstMove = false;
@@ -298,8 +303,8 @@ document.addEventListener("click", (ele) => {
 
   box.classList.add("full");
   box.innerHTML = isFirstPlayerTurn ? firstPlayerShape : secondPlayerShape;
-  isFirstPlayerTurn = !isFirstPlayerTurn;
   isItWinner(box.innerHTML);
+  isFirstPlayerTurn = !isFirstPlayerTurn;
 });
 
 function chooseWhoWillStart() {
@@ -313,12 +318,12 @@ chooseWhoWillStart();
 
 function choosePlayersShape(XOBox) {
   if (isFirstPlayerTurn) {
-      firstPlayerShape = XOBox.classList.contains("x-shape") ? "X" : "O";
-      secondPlayerShape = firstPlayerShape == "X" ? "O" : "X";
-    } else {
-      secondPlayerShape = XOBox.classList.contains("x-shape") ? "X" : "O";
-      firstPlayerShape = secondPlayerShape == "X" ? "O" : "X";
-    }
+    firstPlayerShape = XOBox.classList.contains("x-shape") ? "X" : "O";
+    secondPlayerShape = firstPlayerShape == "X" ? "O" : "X";
+  } else {
+    secondPlayerShape = XOBox.classList.contains("x-shape") ? "X" : "O";
+    firstPlayerShape = secondPlayerShape == "X" ? "O" : "X";
+  }
 }
 function changeArrowDirection() {
   if (isFirstPlayerTurn) {
@@ -350,10 +355,7 @@ function isItWinner(shape) {
       )
         counter++;
       if (counter == 3) {
-        gameEndPopup(
-          (isFirstPlayerTurn ? firstPlayer : secondPlayer).lastElementChild
-            .innerHTML
-        );
+        gameEndPopup(false);
         return;
       }
     }
@@ -363,24 +365,28 @@ function isItWinner(shape) {
   for (let i = 0; i < boxes.length; i++) {
     if (boxes[i].classList.contains("full")) fullBoxes++;
   }
-  if (fullBoxes == 9) gameEndPopup(null);
+  if (fullBoxes == 9) gameEndPopup(true);
 }
 
-function gameEndPopup(winner) {
+function gameEndPopup(isItDraw) {
+  let winner = (isFirstPlayerTurn ? firstPlayer : secondPlayer).cloneNode(true);
   let container = document.createElement("div");
   let header = document.createElement("h2");
   let button = document.createElement("button");
 
-  if (winner) {
-    header.innerHTML = `The Winner is: ${winner}`;
-  } else {
-    header.innerHTML = `It's A Draw!`;
-  }
   container.className = "game-end-popup";
   button.innerHTML = "Play Again";
-
   container.append(header, button);
   document.body.append(container);
+
+  if (isItDraw) {
+    header.innerHTML = `It's A Draw!`;
+    registerMatchesData(true);
+  } else {
+    header.innerHTML = `The Winner is:`;
+    header.parentElement.append(winner);
+    registerMatchesData(false);
+  }
 
   button.addEventListener("click", () => {
     boxes.forEach((box) => {
@@ -390,4 +396,102 @@ function gameEndPopup(winner) {
     isFirstMove = true;
     container.remove();
   });
+}
+
+function registerMatchesData(isItDraw) {
+  let firstPlayerName = firstPlayer.lastElementChild.innerHTML;
+  let secondPlayerName = secondPlayer.lastElementChild.innerHTML;
+  let localPlayerData = JSON.parse(localStorage.PlayersData) || [];
+  let firstPlayerData;
+  let secondPlayerData;
+  let date = new Date().toISOString().split("T")[0];
+
+  for (let i = 0; i < localPlayerData.length; i++) {
+    if (localPlayerData[i].username == firstPlayerName)
+      firstPlayerData = localPlayerData[i];
+    if (localPlayerData[i].username == secondPlayerName)
+      secondPlayerData = localPlayerData[i];
+  }
+
+  firstPlayerData.matchHistory = (firstPlayerData.matchHistory || []);
+  secondPlayerData.matchHistory = (secondPlayerData.matchHistory || []);
+
+  firstPlayerData.totalMatches = (firstPlayerData.totalMatches || 0) + 1;
+  secondPlayerData.totalMatches = (secondPlayerData.totalMatches || 0) + 1;
+
+  if (isItDraw) {
+    firstPlayerData.totalDraws = (firstPlayerData.totalDraws || 0) + 1;
+    secondPlayerData.totalDraws = (secondPlayerData.totalDraws || 0) + 1;
+
+    registerMatchHistory(firstPlayerData,secondPlayerData);
+
+    localStorage.PlayersData = JSON.stringify(localPlayerData);
+    return;
+  }
+
+  if (isFirstPlayerTurn) {
+    firstPlayerData.totalWins = (firstPlayerData.totalWins || 0) + 1;
+    secondPlayerData.totalLosses = (secondPlayerData.totalLosses || 0) + 1;
+    firstPlayerData.matchHistory.push(
+      {
+        date: date,
+        matchId: `Ma-${Date.now()}`,
+        opponent: secondPlayerName,
+        result: "Win",
+        score: { player: 1, opponent: 0 },
+      }
+    );
+   secondPlayerData.matchHistory.push(
+      {
+        date: date,
+        matchId: `Ma-${Date.now()}`,
+        opponent: firstPlayerName,
+        result: "Lose",
+        score: { player: 0, opponent: 1 },
+      }
+    );
+  } else {
+    firstPlayerData.totalLosses = (firstPlayerData.totalLosses || 0) + 1;
+    secondPlayerData.totalWins = (secondPlayerData.totalWins || 0) + 1;
+    firstPlayerData.matchHistory.push(
+      {
+        date: date,
+        matchId: `Ma-${Date.now()}`,
+        opponent: secondPlayerName,
+        result: "Lose",
+        score: { player: 0, opponent: 1 },
+      }
+    );
+   secondPlayerData.matchHistory.push(
+      {
+        date: date,
+        matchId: `Ma-${Date.now()}`,
+        opponent: firstPlayerName,
+        result: "Win",
+        score: { player: 1, opponent: 0 },
+      }
+    );
+  }
+  localStorage.PlayersData = JSON.stringify(localPlayerData);
+}
+
+function registerMatchHistory(firstPlayer,secondPlayer) {
+  firstPlayer.matchHistory.push(
+      {
+        date: date,
+        matchId: `Ma-${Date.now()}`,
+        opponent: secondPlayer.username,
+        result: "Lose",
+        score: { player: 0, opponent: 1 },
+      }
+    );
+   secondPlayer.matchHistory.push(
+      {
+        date: date,
+        matchId: `Ma-${Date.now()}`,
+        opponent: firstPlayer.username,
+        result: "Win",
+        score: { player: 1, opponent: 0 },
+      }
+    );
 }

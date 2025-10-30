@@ -7,13 +7,12 @@ body {
   transition: 0.5s;
   font-family: system-ui;
   background: {
-    image : url(../imgs/bg.jpg);
-    attachment : fixed;
+    image: url(../imgs/bg.jpg);
+    attachment: fixed;
     position: center;
     repeat: no-repeat;
     size: cover;
-  };
-
+  }
 }
 .overlay {
   width: 100%;
@@ -40,52 +39,55 @@ h1 {
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+.first-player,
+.second-player,
+.start-playing {
+  background-color: #1496bc;
+  font-size: 16px;
+  width: fit-content;
+  border-radius: 27px;
+  display: flex;
+  align-items: center;
+  padding: 4px 14px 4px 5px;
+  justify-content: space-between;
+  gap: 9px;
+  cursor: pointer;
+  img {
+    width: 40px;
+    height: 40px;
+    background: white;
+    border-radius: 50%;
+    padding: 4px;
+  }
+}
+span {
+  width: 100px;
+  text-align: center;
+  font-size: 20px;
+  color: white;
+  font-weight: bold;
+}
+
+.start-playing {
+  background-color: transparent;
   span {
-    width: 100px;
-    text-align: center;
-    font-size: 20px;
-    color: white;
-    font-weight: bold;
-  }
-  > div {
-    background-color: #1496bc;
-    font-size: 16px;
     width: fit-content;
-    border-radius: 27px;
-    display: flex;
-    align-items: center;
-    padding: 4px 14px 4px 5px;
-    justify-content: space-between;
-    gap: 9px;
-    cursor: pointer;
-    img {
-      width: 40px;
-      height: 40px;
-      background: white;
-      border-radius: 50%;
-      padding: 4px;
-    }
   }
-  .start-playing {
-    background-color: transparent;
-    span {
-      width: fit-content;
-    }
-    .red,
-    .blue {
-      border: 10px solid transparent;
-    }
-    .blue {
-      border-right: 20px solid #1496bc;
-      opacity: 0;
-    }
-    .red {
-      border-left: 20px solid #c05151;
-    }
+  .red,
+  .blue {
+    border: 10px solid transparent;
   }
-  .second-player {
-    background-color: #c05151;
+  .blue {
+    border-right: 20px solid #1496bc;
+    opacity: 0;
   }
+  .red {
+    border-left: 20px solid #c05151;
+  }
+}
+.second-player {
+  background-color: #c05151;
 }
 .start-game {
   background-color: white;
@@ -326,7 +328,7 @@ h1 {
 
 .game-end-popup {
   width: 600px;
-  height: 150px;
+  height: 216px;
   background-color: #00a66e;
   color: white;
   padding: 20px;
@@ -336,6 +338,9 @@ h1 {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  flex-direction: column;
   h2 {
     line-height: 2;
     font-size: 40px;

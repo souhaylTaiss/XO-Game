@@ -42,14 +42,10 @@ h1 {
   align-items: center;
   justify-content: space-between;
 }
-.players-account span {
-  width: 100px;
-  text-align: center;
-  font-size: 20px;
-  color: white;
-  font-weight: bold;
-}
-.players-account > div {
+
+.first-player,
+.second-player,
+.start-playing {
   background-color: #1496bc;
   font-size: 16px;
   width: -moz-fit-content;
@@ -62,32 +58,44 @@ h1 {
   gap: 9px;
   cursor: pointer;
 }
-.players-account > div img {
+.first-player img,
+.second-player img,
+.start-playing img {
   width: 40px;
   height: 40px;
   background: white;
   border-radius: 50%;
   padding: 4px;
 }
-.players-account .start-playing {
+
+span {
+  width: 100px;
+  text-align: center;
+  font-size: 20px;
+  color: white;
+  font-weight: bold;
+}
+
+.start-playing {
   background-color: transparent;
 }
-.players-account .start-playing span {
+.start-playing span {
   width: -moz-fit-content;
   width: fit-content;
 }
-.players-account .start-playing .red,
-.players-account .start-playing .blue {
+.start-playing .red,
+.start-playing .blue {
   border: 10px solid transparent;
 }
-.players-account .start-playing .blue {
+.start-playing .blue {
   border-right: 20px solid #1496bc;
   opacity: 0;
 }
-.players-account .start-playing .red {
+.start-playing .red {
   border-left: 20px solid #c05151;
 }
-.players-account .second-player {
+
+.second-player {
   background-color: #c05151;
 }
 
@@ -329,7 +337,7 @@ h1 {
 
 .game-end-popup {
   width: 600px;
-  height: 150px;
+  height: 216px;
   background-color: #00a66e;
   color: white;
   padding: 20px;
@@ -339,6 +347,9 @@ h1 {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 }
 .game-end-popup h2 {
   line-height: 2;
