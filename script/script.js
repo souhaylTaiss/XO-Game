@@ -13,8 +13,9 @@ const warningPassMsg = form.children[1].lastElementChild;
 const closeBtn = document.querySelector(".close-btn");
 const leftArrow = document.querySelector(".blue");
 const rightArrow = document.querySelector(".red");
+const asides = document.querySelectorAll("aside");
+const asidesCloseBtns = document.querySelectorAll("aside .close-btn");
 
-console.log(localStorage.FirstPlayer);
 if (localStorage.FirstPlayer != null) {
   putSignedInPlayer("FirstPlayer", firstPlayer);
 }
@@ -39,30 +40,155 @@ function putSignedInPlayer(key, player) {
 
 let player;
 firstPlayer.addEventListener("click", () => {
+  if (firstPlayer.classList.contains("full")) {
+    getPlayerInfo(firstPlayer);
+    return;
+  }
   player = firstPlayer;
   playerAccount.lastElementChild.innerHTML = "Player One";
   startGame.style.top = "50%";
   focusOnPlayer("#1496bc");
 });
 secondPlayer.addEventListener("click", () => {
+  if (secondPlayer.classList.contains("full")) {
+    getPlayerInfo(secondPlayer);
+    return;
+  }
   player = secondPlayer;
   playerAccount.lastElementChild.innerHTML = "Player Two";
   startGame.style.top = "50%";
   focusOnPlayer("#c05151");
 });
 
+function getPlayerInfo(player) {
+  document.querySelector(".player-info")?.remove();
+
+  let playerName = player.lastElementChild.innerHTML;
+  let playerInfoCard = document.createElement("div");
+  let signOutBtn = document.createElement("button");
+  let closeBtn = document.createElement("div");
+  let info = ["Matches", "Wins", "Losses", "Draws"];
+  let localPlayerData = JSON.parse(localStorage.PlayersData) || [];
+  let playerData;
+
+  if (player == firstPlayer) {
+    playerInfoCard.style.left = "-102px";
+    signOutBtn.style.backgroundColor = " #1496bc";
+  } else {
+    playerInfoCard.style.right = "-102px";
+    signOutBtn.style.backgroundColor = "#c05151";
+  }
+
+  playerInfoCard.className = "player-info";
+
+  for (let i = 0; i < localPlayerData.length; i++) {
+    if (localPlayerData[i].username == playerName.trim()) {
+      playerData = localPlayerData[i];
+      break;
+    }
+  }
+
+  playerInfoCard.append(player.cloneNode(true));
+  for (let i = 0; i < info.length; i++) {
+    let row = document.createElement("div");
+    let data = `
+     <span>Total ${info[i]}</span>
+     <span>:</span>
+     <span>${playerData[`total${info[i]}`] || 0}</span>
+  `;
+    row.innerHTML = data;
+    if (info[i] == "Matches") {
+      row.setAttribute("title","open");
+      row.addEventListener("click", () => {
+        if (player == firstPlayer) {
+          asides[0].classList.add("active");
+        } else {
+          asides[1].classList.add("active");
+        }
+        getMatchesData(row.previousElementSibling.lastElementChild.innerHTML)
+      });
+    }
+    playerInfoCard.append(row);
+  }
+
+  signOutBtn.innerHTML = "Sing Out";
+  closeBtn.classList = "close-btn";
+  playerInfoCard.append(signOutBtn, closeBtn);
+  player.parentElement.append(playerInfoCard);
+  isPlayerInfoCardActive = true;
+
+  signOutBtn.addEventListener("click", () => {
+    for (let i = 0; i < boxes.length; i++) {
+      boxes[i].innerHTML = "";
+      boxes[i].classList.remove("full");
+    }
+    player.innerHTML = `<span>+</span>`;
+    player.classList.remove("full");
+    playerInfoCard.remove();
+  });
+
+  closeBtn.addEventListener("click", () => {
+    playerInfoCard.remove();
+  });
+}
+
+function getMatchesData(playerName) {
+  let matchesBox = document.querySelector(".matches-box");
+  let playersData = getPlayersData();
+  let player;
+
+ for (let i = 0; i < 2; i++) {
+  if (playerName == playersData[i].username) {
+    player = playersData[i];
+  }
+ }
+
+  const groupedByDate = player.matchHistory.reduce((acc, item) => {
+  (acc[item.date] ??= []).push(item);
+  return acc;
+},{});
+
+const groups = Object.entries(groupedByDate).map(([date, items]) => ({
+  date,
+  items
+}));
+
+console.log(groups)
+
+ let data = `<h3 class="date">3 Aug 2025</h3>
+        <div class="match-result">
+          <div class="first-player">
+               <img src="./imgs/(1).png" alt="face" />
+        <h3>player one</h3>
+          </div>
+          <div class="result">
+            <div>0</div> | <div>1</div>
+          </div>
+          <div class="second-player">
+               <img src="./imgs/(1).png" alt="face" />
+        <h3>player one</h3>
+          </div>
+        </div>`
+}
+
 closeBtn.addEventListener("click", () => {
   startGame.style.top = "-50%";
   resetBtn.click();
 });
+
+asidesCloseBtns.forEach(btn => {
+ btn.addEventListener("click", () => {
+  btn.parentElement.classList.remove("active");
+})
+})
 
 function focusOnPlayer(playerClr) {
   playerAccount.style.backgroundColor = playerClr;
   form.style.backgroundColor = playerClr;
   nextBtn.style.backgroundColor = playerClr;
   resetBtn.style.backgroundColor = playerClr;
-  resetBtn.click();
   account.style.color = playerClr;
+  resetBtn.click();
 }
 
 let isNameCorrect = false;
@@ -161,13 +287,17 @@ function singUp(profileImg) {
 }
 
 function singIn() {
-  let localPlayerData = JSON.parse(localStorage.getItem(PlayersData)) || [];
+  let localPlayerData =
+    localStorage.PlayersData == undefined
+      ? [1]
+      : JSON.parse(localStorage.PlayersData);
 
   for (let i = 0; i < localPlayerData.length; i++) {
     if (localPlayerData[i].username == playerName.value.trim()) {
       warningNameMsg.style.display = "none";
       if (localPlayerData[i].password == password.value.trim()) {
         warningPassMsg.style.display = "none";
+
         return localPlayerData[i];
       } else {
         warningPassMsg.innerHTML = "The password is incorrect!";
@@ -381,6 +511,16 @@ function gameEndPopup(isItDraw) {
 
   if (isItDraw) {
     header.innerHTML = `It's A Draw!`;
+    let div = document.createElement("div");
+    let span = document.createElement("span");
+    div.style = "display: flex;align-items: center;gap: 23px";
+    span.style.fontSize = "40px";
+    span.innerHTML = "🫱🏻‍🫲🏼";
+    div.append(firstPlayer.cloneNode(true));
+    div.append(span);
+    div.append(secondPlayer.cloneNode(true));
+
+    header.parentElement.append(div);
     registerMatchesData(true);
   } else {
     header.innerHTML = `The Winner is:`;
@@ -399,99 +539,83 @@ function gameEndPopup(isItDraw) {
 }
 
 function registerMatchesData(isItDraw) {
-  let firstPlayerName = firstPlayer.lastElementChild.innerHTML;
-  let secondPlayerName = secondPlayer.lastElementChild.innerHTML;
-  let localPlayerData = JSON.parse(localStorage.PlayersData) || [];
-  let firstPlayerData;
-  let secondPlayerData;
+  let [firstPlayerData, secondPlayerData, localPlayerData] = getPlayersData();
+
+  firstPlayerData.totalMatches++;
+  secondPlayerData.totalMatches++;
+
+  let result;
+  if (isItDraw) {
+    firstPlayerData.totalDraws++;
+    secondPlayerData.totalDraws++;
+    result = "Draw";
+  } else if (isFirstPlayerTurn) {
+    firstPlayerData.totalWins++;
+    secondPlayerData.totalLosses++;
+    result = "Win";
+  } else {
+    firstPlayerData.totalLosses++;
+    secondPlayerData.totalWins++;
+    result = "Lose";
+  }
+  registerMatchDetails([
+    firstPlayerData,
+    secondPlayerData,
+    localPlayerData,
+    result,
+  ]);
+}
+
+function registerMatchDetails(data) {
+  let [firstPlayerData, secondPlayerData, localPlayerData, result] = data;
   let date = new Date().toISOString().split("T")[0];
 
-  for (let i = 0; i < localPlayerData.length; i++) {
-    if (localPlayerData[i].username == firstPlayerName)
-      firstPlayerData = localPlayerData[i];
-    if (localPlayerData[i].username == secondPlayerName)
-      secondPlayerData = localPlayerData[i];
-  }
+  let first = {
+    date: date,
+    matchId: `Ma-${Date.now()}`,
+    opponent: secondPlayerData.username,
+    result: result,
+    score: {
+      player: result == "Draw" ? 0 : result == "Win" ? 1 : 0,
+      opponent: result == "Draw" ? 0 : result == "Win" ? 0 : 1,
+    },
+  };
 
-  firstPlayerData.matchHistory = (firstPlayerData.matchHistory || []);
-  secondPlayerData.matchHistory = (secondPlayerData.matchHistory || []);
+  let second = { ...first };
+  second.opponent = firstPlayerData.username;
+  second.result = result == "Draw" ? "Draw" : result == "Win" ? "Lose" : "Win";
+  second.score = {
+    player: first.score.opponent,
+    opponent: first.score.player,
+  };
 
-  firstPlayerData.totalMatches = (firstPlayerData.totalMatches || 0) + 1;
-  secondPlayerData.totalMatches = (secondPlayerData.totalMatches || 0) + 1;
-
-  if (isItDraw) {
-    firstPlayerData.totalDraws = (firstPlayerData.totalDraws || 0) + 1;
-    secondPlayerData.totalDraws = (secondPlayerData.totalDraws || 0) + 1;
-
-    registerMatchHistory(firstPlayerData,secondPlayerData);
-
-    localStorage.PlayersData = JSON.stringify(localPlayerData);
-    return;
-  }
-
-  if (isFirstPlayerTurn) {
-    firstPlayerData.totalWins = (firstPlayerData.totalWins || 0) + 1;
-    secondPlayerData.totalLosses = (secondPlayerData.totalLosses || 0) + 1;
-    firstPlayerData.matchHistory.push(
-      {
-        date: date,
-        matchId: `Ma-${Date.now()}`,
-        opponent: secondPlayerName,
-        result: "Win",
-        score: { player: 1, opponent: 0 },
-      }
-    );
-   secondPlayerData.matchHistory.push(
-      {
-        date: date,
-        matchId: `Ma-${Date.now()}`,
-        opponent: firstPlayerName,
-        result: "Lose",
-        score: { player: 0, opponent: 1 },
-      }
-    );
-  } else {
-    firstPlayerData.totalLosses = (firstPlayerData.totalLosses || 0) + 1;
-    secondPlayerData.totalWins = (secondPlayerData.totalWins || 0) + 1;
-    firstPlayerData.matchHistory.push(
-      {
-        date: date,
-        matchId: `Ma-${Date.now()}`,
-        opponent: secondPlayerName,
-        result: "Lose",
-        score: { player: 0, opponent: 1 },
-      }
-    );
-   secondPlayerData.matchHistory.push(
-      {
-        date: date,
-        matchId: `Ma-${Date.now()}`,
-        opponent: firstPlayerName,
-        result: "Win",
-        score: { player: 1, opponent: 0 },
-      }
-    );
-  }
+  firstPlayerData.matchHistory.push(first);
+  secondPlayerData.matchHistory.push(second);
   localStorage.PlayersData = JSON.stringify(localPlayerData);
 }
 
-function registerMatchHistory(firstPlayer,secondPlayer) {
-  firstPlayer.matchHistory.push(
-      {
-        date: date,
-        matchId: `Ma-${Date.now()}`,
-        opponent: secondPlayer.username,
-        result: "Lose",
-        score: { player: 0, opponent: 1 },
-      }
-    );
-   secondPlayer.matchHistory.push(
-      {
-        date: date,
-        matchId: `Ma-${Date.now()}`,
-        opponent: firstPlayer.username,
-        result: "Win",
-        score: { player: 1, opponent: 0 },
-      }
-    );
+function getPlayersData() {
+  let localPlayerData = JSON.parse(localStorage.PlayersData) || [];
+  let firstPlayerName = firstPlayer.lastElementChild.innerHTML;
+  let secondPlayerName = secondPlayer.lastElementChild.innerHTML;
+  let first, second;
+
+  for (let i = 0; i < localPlayerData.length; i++) {
+    if (localPlayerData[i].username == firstPlayerName)
+      first = localPlayerData[i];
+    if (localPlayerData[i].username == secondPlayerName)
+      second = localPlayerData[i];
+  }
+  initializePlayerData(first);
+  initializePlayerData(second);
+  return [first, second, localPlayerData];
+}
+
+function initializePlayerData(player) {
+  player.totalMatches = player.totalMatches || 0;
+  player.totalDraws = player.totalDraws || 0;
+  player.totalWins = player.totalWins || 0;
+  player.totalLosses = player.totalLosses || 0;
+  player.matchHistory = player.matchHistory || [];
+  return player;
 }

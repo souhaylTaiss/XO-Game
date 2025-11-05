@@ -42,6 +42,60 @@ h1 {
   align-items: center;
   justify-content: space-between;
 }
+.players-account .start {
+  width: 100px;
+  text-align: center;
+  font-size: 20px;
+  color: white;
+  font-weight: bold;
+}
+.players-account .player-info {
+  position: absolute;
+  right: -102px;
+  top: 55px;
+  background: #fff;
+  border-radius: 5px;
+  width: 233px;
+  overflow: hidden;
+  box-shadow: -5px -5px 10px #232323, 5px 5px 10px #232323;
+  font-weight: bold;
+}
+.players-account .player-info > div:nth-child(2) {
+  color: #0084cb;
+  cursor: pointer;
+}
+.players-account .player-info > div:not(.close-btn) {
+  padding: 5px 15px;
+  padding-right: 30px;
+  display: flex;
+  justify-content: space-between;
+}
+.players-account .player-info > div:not(.close-btn) span:first-child {
+  width: 106px;
+}
+.players-account .player-info .close-btn {
+  background: white;
+  padding: 15px;
+  border-radius: 5px;
+}
+.players-account .player-info > div:first-child {
+  width: 100%;
+  border-radius: 0;
+  color: white;
+  justify-content: left;
+}
+.players-account .player-info button {
+  background: #c05151;
+  border: none;
+  padding: 9px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  font-weight: bold;
+  cursor: pointer;
+  margin: 8px auto;
+  color: white;
+  display: block;
+}
 
 .first-player,
 .second-player,
@@ -54,8 +108,8 @@ h1 {
   display: flex;
   align-items: center;
   padding: 4px 14px 4px 5px;
-  justify-content: space-between;
   gap: 9px;
+  color: white;
   cursor: pointer;
 }
 .first-player img,
@@ -67,12 +121,12 @@ h1 {
   border-radius: 50%;
   padding: 4px;
 }
-
-span {
-  width: 100px;
-  text-align: center;
-  font-size: 20px;
+.first-player span,
+.second-player span,
+.start-playing span {
+  padding: 3px 30px;
   color: white;
+  font-size: 18px;
   font-weight: bold;
 }
 
@@ -240,25 +294,28 @@ span {
   bottom: 30px;
   left: 98px;
 }
-.start-game .close-btn {
+
+.close-btn {
   position: absolute;
-  top: 8px;
-  right: 12px;
+  top: 10px;
+  right: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
+  width: 22px;
+  height: 22px;
   cursor: pointer;
 }
-.start-game .close-btn::after, .start-game .close-btn::before {
+.close-btn::after, .close-btn::before {
   content: "";
   width: 2px;
   height: 25px;
   background-color: red;
   transform: rotate(45deg);
   display: block;
+  position: absolute;
 }
-.start-game .close-btn::before {
+.close-btn::before {
   transform: rotate(-45deg);
 }
 
@@ -371,8 +428,8 @@ span {
 
 .sign-in-msg {
   padding: 10px 19px;
-  background-color: rgba(0, 0, 0, 0.419);
-  color: white;
+  background-color: rgb(255, 255, 255);
+  font-weight: bold;
   position: absolute;
   top: -50px;
   left: 50%;
@@ -380,4 +437,54 @@ span {
   border-radius: 16px;
   text-transform: uppercase;
   transition: 0.4s;
+}
+
+.left-slider, .right-slider {
+  position: fixed;
+  height: 100vh;
+  top: 0px;
+  background-color: white;
+  padding: 20px;
+  text-align: center;
+  overflow-y: scroll;
+  transition: 0.3s;
+}
+.left-slider.left-slider, .right-slider.left-slider {
+  left: -100%;
+  box-shadow: 38px 0px 30px rgba(14, 14, 14, 0.6901960784);
+}
+.left-slider.right-slider, .right-slider.right-slider {
+  right: -100%;
+  box-shadow: -38px 0px 30px rgba(14, 14, 14, 0.6901960784);
+}
+.left-slider.left-slider.active, .right-slider.left-slider.active {
+  left: 0;
+}
+.left-slider.right-slider.active, .right-slider.right-slider.active {
+  right: 0;
+}
+.left-slider .matches-box, .right-slider .matches-box {
+  margin-bottom: 25px;
+}
+.left-slider .matches-box .date, .right-slider .matches-box .date {
+  margin: 20px 0px;
+  color: #454545;
+  font-weight: normal;
+  font-size: 21px;
+  border-bottom: 1px solid #cdcdcd;
+  padding-bottom: 4px;
+}
+.left-slider .matches-box > div, .right-slider .matches-box > div {
+  margin-bottom: 15px;
+}
+.left-slider .matches-box .match-result, .right-slider .matches-box .match-result {
+  display: flex;
+  gap: 35px;
+}
+.left-slider .matches-box .match-result .result, .right-slider .matches-box .match-result .result {
+  font-size: 25px;
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  color: #454545;
 }/*# sourceMappingURL=style.css.map */

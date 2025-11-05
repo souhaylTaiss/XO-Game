@@ -39,6 +39,61 @@ h1 {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  .start {
+    width: 100px;
+    text-align: center;
+    font-size: 20px;
+    color: white;
+    font-weight: bold;
+  }
+
+  .player-info {
+    position: absolute;
+    right: -102px;
+    top: 55px;
+    background: #fff;
+    border-radius: 5px;
+    width: 233px;
+    overflow: hidden;
+    box-shadow: -5px -5px 10px #232323, 5px 5px 10px #232323;
+    font-weight: bold;
+    > div:nth-child(2) {
+      color: #0084cb;
+      cursor: pointer;
+    }
+    > div:not(.close-btn) {
+      padding: 5px 15px;
+      padding-right: 30px;
+      display: flex;
+      justify-content: space-between;
+      span:first-child {
+        width: 106px;
+      }
+    }
+    .close-btn {
+      background: white;
+      padding: 15px;
+      border-radius: 5px;
+    }
+    > div:first-child {
+      width: 100%;
+      border-radius: 0;
+      color: white;
+      justify-content: left;
+    }
+    button {
+      background: #c05151;
+      border: none;
+      padding: 9px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      font-weight: bold;
+      cursor: pointer;
+      margin: 8px auto;
+      color: white;
+      display: block;
+    }
+  }
 }
 .first-player,
 .second-player,
@@ -50,8 +105,8 @@ h1 {
   display: flex;
   align-items: center;
   padding: 4px 14px 4px 5px;
-  justify-content: space-between;
   gap: 9px;
+  color: white;
   cursor: pointer;
   img {
     width: 40px;
@@ -60,13 +115,12 @@ h1 {
     border-radius: 50%;
     padding: 4px;
   }
-}
-span {
-  width: 100px;
-  text-align: center;
-  font-size: 20px;
-  color: white;
-  font-weight: bold;
+  span {
+    padding: 3px 30px;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+  }
 }
 
 .start-playing {
@@ -232,27 +286,29 @@ span {
       left: 98px;
     }
   }
-  .close-btn {
+}
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+  &::after,
+  &::before {
+    content: "";
+    width: 2px;
+    height: 25px;
+    background-color: red;
+    transform: rotate(45deg);
+    display: block;
     position: absolute;
-    top: 8px;
-    right: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 24px;
-    cursor: pointer;
-    &::after,
-    &::before {
-      content: "";
-      width: 2px;
-      height: 25px;
-      background-color: red;
-      transform: rotate(45deg);
-      display: block;
-    }
-    &::before {
-      transform: rotate(-45deg);
-    }
+  }
+  &::before {
+    transform: rotate(-45deg);
   }
 }
 .container {
@@ -361,8 +417,8 @@ span {
 }
 .sign-in-msg {
   padding: 10px 19px;
-  background-color: rgba(0, 0, 0, 0.419);
-  color: white;
+  background-color: rgb(255, 255, 255);
+  font-weight: bold;
   position: absolute;
   top: -50px;
   left: 50%;
@@ -370,4 +426,54 @@ span {
   border-radius: 16px;
   text-transform: uppercase;
   transition: 0.4s;
+}
+.left-slider,.right-slider {
+  position: fixed;
+  height: 100vh;
+  top: 0px;
+  background-color: white;
+  padding: 20px;
+  text-align: center;
+  overflow-y: scroll;
+  transition: .3s;
+  &.left-slider {
+    left: -100%;
+    box-shadow: 38px 0px 30px #0e0e0eb0;
+  }
+  &.right-slider {
+    right: -100%;
+    box-shadow: -38px 0px 30px #0e0e0eb0;
+  }
+  &.left-slider.active {
+    left: 0;
+  }
+  &.right-slider.active {
+    right: 0;
+  }
+  .matches-box {
+    margin-bottom: 25px;
+     .date {
+      margin: 20px 0px;
+      color: #454545;
+      font-weight: normal;
+      font-size: 21px;
+      border-bottom: 1px solid #cdcdcd;
+      padding-bottom: 4px;
+    }
+    > div {
+      margin-bottom: 15px;
+    }
+    .match-result {
+      display: flex;
+      gap: 35px;
+      .result {
+        font-size: 25px;
+        display: flex;
+        align-items: center;
+        gap: 25px;
+        color: #454545;
+      }
+    }
+
+  }
 }
