@@ -8,7 +8,6 @@
   </head>
   <body>
     <div class="overlay"></div>
-    <h1>XO Game</h1>
     <div class="start-game">
       <div class="close-btn"></div>
       <h2>Create Account</h2>
@@ -20,7 +19,7 @@
         <div>
           <label for="name">Name : </label>
           <input type="text" name="name" id="name" placeholder="Your Name" />
-          <span class="warning"
+          <span class="warning name"
             >Do not use any Spacial character (!,&,%,*,#...)</span
           >
         </div>
@@ -31,8 +30,8 @@
             name="password"
             id="password"
             placeholder="Your Password"
-          />
-          <span class="warning"
+            />
+            <span class="warning password"
             >Your password should contain (Big character,Number,Special
             character)</span
           >
@@ -52,20 +51,81 @@
           </div>
         </div>
       </form>
-      <button>Reset</button>
-      <button>Next</button>
-      <div>Log In</div>
+      <button id="reset">Reset</button>
+      <button id="next">Next</button>
+      <div>Sign In</div>
     </div>
-
+      <h1>XO Game</h1>
     <div class="players-account">
-      <div class="first-player"><span>+</span></div>
+      <div class="first-player">
+        <div class="account" ><span>+</span></div>
+        <div class="player-info" data-first>
+          <div class="account">
+            <img src="http://127.0.0.1:5500/XO-Game/imgs/(8).png" />
+            <h3>Souhayl Taiss</h3>
+          </div>
+          <div title="open">
+            <span>Total Matches</span>
+            <span> : </span>
+            <span data-totalMatches>8</span>
+          </div>
+          <div>
+            <span>Total Wins</span>
+            <span> : </span>
+            <span data-totalWins>6</span>
+          </div>
+          <div>
+            <span>Total Losses</span>
+            <span> : </span>
+            <span data-totalLosses>2</span>
+          </div>
+          <div>
+            <span>Total Draws</span>
+            <span> : </span>
+            <span data-totalDraws>0</span>
+          </div>
+          <button>Sing Out</button>
+          <div class="close-btn"></div>
+        </div>
+      </div>
+
       <div class="start-playing">
         <div class="blue"></div>
         <span class="start">START</span>
         <div class="red"></div>
       </div>
-      <div class="second-player"><span>+</span></div>
 
+      <div class="second-player">
+        <div class="account second-player-clr"><span>+</span></div>
+        <div class="player-info">
+          <div class="account second-player-clr">
+            <img src="http://127.0.0.1:5500/XO-Game/imgs/(8).png" />
+            <h3>Souhayl Taiss</h3>
+          </div>
+      <div title="open">
+            <span>Total Matches</span>
+            <span> : </span>
+            <span data-totalMatches>8</span>
+          </div>
+          <div>
+            <span>Total Wins</span>
+            <span> : </span>
+            <span data-totalWins>6</span>
+          </div>
+          <div>
+            <span>Total Losses</span>
+            <span> : </span>
+            <span data-totalLosses>2</span>
+          </div>
+          <div>
+            <span>Total Draws</span>
+            <span> : </span>
+            <span data-totalDraws>0</span>
+          </div>
+          <button>Sing Out</button>
+          <div class="close-btn"></div>
+        </div>
+      </div>
     </div>
     <div class="container">
       <div class="box"></div>
@@ -79,98 +139,31 @@
       <div class="box"></div>
     </div>
     <div class="sign-in-msg">Please Sign In To Play</div>
+
+    <div class="rounds">
+      <div>
+        <div class="account"><span>?</span></div>
+        <div class="first-player-score">0</div>
+      </div>
+      <div>
+        <div class="start">VS</div>
+        <div class="round-num">Round <span>1</span></div>
+      </div>
+      <div>
+        <div class="account"><span>?</span></div>
+        <div class="second-player-score">0</div>
+      </div>
+    </div>
     <aside class="left-slider">
       <h2>All Matches</h2>
-      <div class="matches-box">
-        <h3 class="date">3 Aug 2025</h3>
-        <div class="match-result">
-          <div class="first-player">
-               <img src="./imgs/(1).png" alt="face" />
-        <h3>player one</h3>
-          </div>
-          <div class="result">
-            <div>0</div> | <div>1</div>
-          </div>
-          <div class="second-player">
-               <img src="./imgs/(1).png" alt="face" />
-        <h3>player one</h3>
-          </div>
-        </div>
-        <div class="match-result">
-          <div class="first-player">
-               <img src="./imgs/(1).png" alt="face" />
-        <h3>player one</h3>
-          </div>
-          <div class="result">
-            <div>0</div> | <div>1</div>
-          </div>
-          <div class="second-player">
-               <img src="./imgs/(1).png" alt="face" />
-        <h3>player one</h3>
-          </div>
-        </div>
-        <div class="match-result">
-          <div class="first-player">
-               <img src="./imgs/(1).png" alt="face" />
-        <h3>player one</h3>
-          </div>
-          <div class="result">
-            <div>0</div> | <div>1</div>
-          </div>
-          <div class="second-player">
-               <img src="./imgs/(1).png" alt="face" />
-        <h3>player one</h3>
-          </div>
-        </div>
-      </div>
       <div class="close-btn"></div>
+      <div class="matches-container"></div>
     </aside>
 
     <aside class="right-slider">
       <h2>All Matches</h2>
-      <div class="matches-box">
-        <h3 class="date">3 Aug 2025</h3>
-        <div class="match-result">
-          <div class="first-player">
-               <img src="./imgs/(1).png" alt="face" />
-        <h3>player one</h3>
-          </div>
-          <div class="result">
-            <div>0</div> | <div>1</div>
-          </div>
-          <div class="second-player">
-               <img src="./imgs/(1).png" alt="face" />
-        <h3>player one</h3>
-          </div>
-        </div>
-        <div class="match-result">
-          <div class="first-player">
-               <img src="./imgs/(1).png" alt="face" />
-        <h3>player one</h3>
-          </div>
-          <div class="result">
-            <div>0</div> | <div>1</div>
-          </div>
-          <div class="second-player">
-               <img src="./imgs/(1).png" alt="face" />
-        <h3>player one</h3>
-          </div>
-        </div>
-        <div class="match-result">
-          <div class="first-player">
-               <img src="./imgs/(1).png" alt="face" />
-        <h3>player one</h3>
-          </div>
-          <div class="result">
-            <div>0</div> | <div>1</div>
-          </div>
-          <div class="second-player">
-               <img src="./imgs/(1).png" alt="face" />
-        <h3>player one</h3>
-          </div>
-        </div>
-      </div>
       <div class="close-btn"></div>
+      <div class="matches-container"></div>
     </aside>
     <script src="./script/script.js"></script>
   </body>
