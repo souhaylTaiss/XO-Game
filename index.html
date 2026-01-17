@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="./style/style.css" />
+    <link rel="stylesheet" href="./assets/style/style.css" />
     <title>XO Game</title>
   </head>
   <body>
@@ -12,7 +12,7 @@
       <div class="close-btn"></div>
       <h2>Create Account</h2>
       <div class="player">
-        <img src="./imgs/(1).png" alt="face" />
+        <img src="./assets/imgs/(1).png" alt="face" />
         <h3>player one</h3>
       </div>
       <form action="#">
@@ -39,15 +39,15 @@
         <div class="active">
           <p>Profile :</p>
           <div class="emoji-container">
-            <img src="./imgs/(2).png" alt="face" />
-            <img src="./imgs/(3).png" alt="face" />
-            <img src="./imgs/(4).png" alt="face" />
-            <img src="./imgs/(5).png" alt="face" />
-            <img src="./imgs/(6).png" alt="face" />
-            <img src="./imgs/(7).png" alt="face" />
-            <img src="./imgs/(8).png" alt="face" />
-            <img src="./imgs/(9).png" alt="face" />
-            <img src="./imgs/(10).png" alt="face" />
+            <img src="./assets/imgs/(2).png" alt="face" />
+            <img src="./assets/imgs/(3).png" alt="face" />
+            <img src="./assets/imgs/(4).png" alt="face" />
+            <img src="./assets/imgs/(5).png" alt="face" />
+            <img src="./assets/imgs/(6).png" alt="face" />
+            <img src="./assets/imgs/(7).png" alt="face" />
+            <img src="./assets/imgs/(8).png" alt="face" />
+            <img src="./assets/imgs/(9).png" alt="face" />
+            <img src="./assets/imgs/(10).png" alt="face" />
           </div>
         </div>
       </form>
@@ -165,6 +165,15 @@
       <div class="close-btn"></div>
       <div class="matches-container"></div>
     </aside>
-    <script src="./script/script.js"></script>
+    <script src="./assets/script/script.js"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js')
+      .then(reg => console.log('SW registered', reg))
+      .catch(err => console.log('SW registration failed', err));
+  });
+}
+    </script>
   </body>
 </html>

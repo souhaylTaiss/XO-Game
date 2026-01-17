@@ -7,7 +7,7 @@ body {
   transition: 0.5s;
   font-family: system-ui;
   background: {
-    image: url(../imgs/bg.jpg);
+    image: url(../../assets/imgs/bg.jpg);
     attachment: fixed;
     position: center;
     repeat: no-repeat;
@@ -527,7 +527,7 @@ h1 {
 .game-end-popup {
   width: 600px;
   height: 216px;
-  background-image: url(../imgs/winner.jpg);
+  background-image: url(../../assets/imgs/winner.jpg);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -620,7 +620,7 @@ h1 {
   height: 100vh;
   top: 0px;
   background: {
-    image: url(../imgs/bg-list.jpg);
+    image: url(../../assets/imgs/bg-list.jpg);
     position: center;
     repeat: no-repeat;
     size: cover;

@@ -188,7 +188,7 @@ const UIModule = (function () {
     let selectedImg = UI.emojiContainer.querySelector(".active");
 
     name.innerHTML = playerName;
-    profileImg.src = selectedImg?.src || "./imgs/(1).png";
+    profileImg.src = selectedImg?.src || "./assets/imgs/(1).png";
 
     if (typeof playerName == "object") {
       name.innerHTML = playerName.username;
@@ -355,7 +355,7 @@ const UIModule = (function () {
     DataModule.addNewPlayer({
       username: UI.playerNameField.value.trim(),
       password: UI.passwordField.value.trim(),
-      profile: selectedImg?.src || "./imgs/(1).png",
+      profile: selectedImg?.src || "./assets/imgs/(1).png",
     });
 
     DataModule.addLastSingInPlayerName();
@@ -733,3 +733,6 @@ const EventsModule = (function () {
   });
   document.addEventListener("click", (e) => UIModule.playAgain(e.target));
 })();
+
+// pwa
+
