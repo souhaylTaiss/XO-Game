@@ -7,12 +7,12 @@
 body {
   transition: 0.5s;
   font-family: system-ui;
-  background-image: url(../imgs/bg.jpg);
+  overflow: hidden;
+  background-image: url(../../assets/imgs/bg.jpg);
   background-attachment: fixed;
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  overflow: hidden;
 }
 
 ::-webkit-scrollbar {
@@ -126,8 +126,7 @@ h1 {
     height: 35px;
   }
   .account h3 {
-    width: -moz-fit-content;
-    width: fit-content;
+    width: 55px;
   }
 }
 
@@ -241,185 +240,6 @@ h1 {
   border-left: 20px solid #c00707;
 }
 
-.start-game {
-  background-color: white;
-  border-radius: 5px;
-  padding: 15px 20px;
-  display: flex;
-  flex-direction: column;
-  position: absolute;
-  top: -50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 999;
-  align-items: center;
-  overflow: hidden;
-  transition: 0.3s;
-}
-.start-game.active {
-  top: 50%;
-  box-shadow: 3px 3px 12px 100vw rgba(35, 35, 35, 0.39);
-}
-.start-game .player {
-  min-width: 145px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: linear-gradient(45deg, #00133c, #018bd5);
-  padding: 4px 15px 4px 4px;
-  border-radius: 26px;
-  color: white;
-  margin: 14px;
-}
-.start-game .player img {
-  height: 35px;
-  width: 35px;
-  border-radius: 50%;
-  background-color: #fff;
-  padding: 3px;
-}
-.start-game .player h3 {
-  font-size: initial;
-}
-.start-game form {
-  display: flex;
-  flex-direction: column;
-  gap: 27px;
-  width: 400px;
-  background: linear-gradient(45deg, #00133c, #018bd5);
-  padding: 20px;
-  border-radius: 5px;
-  color: white;
-  position: relative;
-  margin-bottom: 60px;
-}
-.start-game form input {
-  width: 76%;
-  border: none;
-  padding: 10px;
-  background-color: #fff;
-  border-radius: 5px;
-}
-.start-game form input:focus {
-  outline: none;
-}
-.start-game form .warning {
-  color: red;
-  font-size: 11px;
-  display: none;
-  position: absolute;
-  right: 0;
-  bottom: -20px;
-  font-weight: bold;
-  background: white;
-  padding: 2px;
-  border-radius: 4px;
-  width: 273px;
-  transform: translateY(2px);
-  border: 2px solid;
-}
-.start-game form p {
-  font-weight: bold;
-  text-transform: uppercase;
-  font-size: 12px;
-}
-.start-game form > div {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  position: relative;
-}
-.start-game form > div:last-child {
-  display: none;
-  gap: 10px;
-  align-items: center;
-}
-.start-game form > div:last-child p {
-  width: 71px;
-}
-.start-game form > div.active {
-  display: flex;
-}
-.start-game label {
-  font-weight: bold;
-  display: inline-block;
-  width: 77px;
-  text-transform: uppercase;
-  font-size: 12px;
-}
-.start-game .emoji-container {
-  width: 77px;
-  background: #fff;
-  border-radius: 5px;
-  flex-grow: 1;
-  font-size: 26px;
-  overflow-y: scroll;
-  height: 34px;
-}
-.start-game .emoji-container img {
-  width: 30px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-.start-game .emoji-container img:hover {
-  background-color: rgb(0, 200, 40);
-}
-.start-game .emoji-container .active {
-  background-color: rgb(0, 200, 40);
-}
-.start-game > div:last-child {
-  font-size: 13px;
-  position: absolute;
-  bottom: 20px;
-  cursor: pointer;
-  color: #0084cb;
-  font-weight: bold;
-}
-.start-game .close-btn::after, .start-game .close-btn::before {
-  background-color: red;
-}
-.start-game button {
-  background: linear-gradient(45deg, #00133c, #018bd5);
-  color: white;
-  border: none;
-  width: -moz-fit-content;
-  width: fit-content;
-  padding: 8px 22px;
-  border-radius: 5px;
-  position: absolute;
-  bottom: 30px;
-  right: 98px;
-  cursor: pointer;
-}
-.start-game button:first-of-type {
-  bottom: 30px;
-  left: 98px;
-}
-@media (max-width: 450px) {
-  .start-game {
-    width: 95vw;
-    padding: 6px;
-  }
-  .start-game form {
-    width: 100%;
-  }
-  .start-game form .warning {
-    font-size: 10px;
-    padding: 4px;
-    width: 282px;
-    border: none;
-  }
-  .start-game > div:last-child {
-    bottom: 10px;
-  }
-  .start-game button {
-    right: 65px;
-  }
-  .start-game button:first-of-type {
-    left: 65px;
-  }
-}
-
 .close-btn {
   position: absolute;
   top: 13px;
@@ -470,108 +290,6 @@ h1 {
   border-radius: 4px;
 }
 
-.xo-popup {
-  border-radius: 4px;
-  display: flex;
-  position: absolute;
-  top: 26%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: #000000;
-  padding: 4px;
-  gap: 4px;
-}
-.xo-popup::after {
-  content: "";
-  position: absolute;
-  border: 20px solid transparent;
-  border-right-width: 10px;
-  border-left-width: 10px;
-  border-top-color: #000000;
-  left: 25px;
-  bottom: -39px;
-}
-.xo-popup.first-player-clr {
-  background: linear-gradient(45deg, #00133c, #018bd5);
-}
-.xo-popup.first-player-clr::after {
-  border-top-color: #022c39;
-}
-.xo-popup.second-player-clr {
-  background: linear-gradient(45deg, #3c0000, #d50101);
-}
-.xo-popup.second-player-clr::after {
-  border-top-color: #5a0505;
-}
-
-.x-shape,
-.o-shape {
-  cursor: pointer;
-  width: 30px;
-  height: 30px;
-  padding: 2px;
-  color: black;
-  background: #fff;
-  text-align: center;
-  font-size: 20px;
-  border-radius: 4px;
-}
-
-.game-end-popup {
-  width: 600px;
-  height: 216px;
-  background-image: url(../imgs/winner.jpg);
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  color: white;
-  padding: 20px;
-  border-radius: 8px;
-  text-align: center;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-}
-.game-end-popup h2 {
-  line-height: 2;
-  font-size: 40px;
-}
-.game-end-popup button {
-  border: none;
-  font-weight: bold;
-  padding: 11px 20px;
-  border-radius: 5px;
-  background-color: #39dc33;
-  position: absolute;
-  left: 50%;
-  bottom: 10px;
-  transform: translateX(-50%);
-  cursor: pointer;
-}
-@media (max-width: 450px) {
-  .game-end-popup {
-    width: 95vw;
-  }
-}
-
-.sign-in-msg {
-  padding: 10px 19px;
-  background-color: rgb(255, 255, 255);
-  font-weight: bold;
-  position: absolute;
-  top: -65px;
-  left: 50%;
-  transform: translateX(-50%);
-  border-radius: 16px;
-  text-transform: uppercase;
-  transition: 0.4s;
-  text-align: center;
-}
-
 .rounds {
   width: 530px;
   height: 130px;
@@ -616,7 +334,7 @@ h1 {
   position: fixed;
   height: 100vh;
   top: 0px;
-  background-image: url(../imgs/bg-list.jpg);
+  background-image: url(../../assets/imgs/bg-list.jpg);
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -696,5 +414,287 @@ h1 {
   .right-slider .matches-box .match-result .result {
     font-size: 20px;
     gap: 6px;
+  }
+}
+
+.register-players {
+  background-color: white;
+  border-radius: 5px;
+  padding: 15px 20px;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: -50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 999;
+  align-items: center;
+  overflow: hidden;
+  transition: 0.3s;
+}
+.register-players.active {
+  top: 50%;
+  box-shadow: 3px 3px 12px 100vw rgba(35, 35, 35, 0.39);
+}
+.register-players .player {
+  min-width: 145px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(45deg, #00133c, #018bd5);
+  padding: 4px 15px 4px 4px;
+  border-radius: 26px;
+  color: white;
+  margin: 14px;
+}
+.register-players .player img {
+  height: 35px;
+  width: 35px;
+  border-radius: 50%;
+  background-color: #fff;
+  padding: 3px;
+}
+.register-players .player h3 {
+  font-size: initial;
+}
+.register-players form {
+  display: flex;
+  flex-direction: column;
+  gap: 27px;
+  width: 400px;
+  background: linear-gradient(45deg, #00133c, #018bd5);
+  padding: 20px;
+  border-radius: 5px;
+  color: white;
+  position: relative;
+  margin-bottom: 60px;
+}
+.register-players form input {
+  width: 76%;
+  border: none;
+  padding: 10px;
+  background-color: #fff;
+  border-radius: 5px;
+}
+.register-players form input:focus {
+  outline: none;
+}
+.register-players form .warning {
+  color: red;
+  font-size: 11px;
+  display: none;
+  position: absolute;
+  right: 0;
+  bottom: -20px;
+  font-weight: bold;
+  background: white;
+  padding: 2px;
+  border-radius: 4px;
+  width: 273px;
+  transform: translateY(2px);
+  border: 2px solid;
+}
+.register-players form p {
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 12px;
+}
+.register-players form > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+}
+.register-players form > div:last-child {
+  display: none;
+  gap: 10px;
+  align-items: center;
+}
+.register-players form > div:last-child p {
+  width: 71px;
+}
+.register-players form > div.active {
+  display: flex;
+}
+.register-players label {
+  font-weight: bold;
+  display: inline-block;
+  width: 77px;
+  text-transform: uppercase;
+  font-size: 12px;
+}
+.register-players .emoji-container {
+  width: 77px;
+  background: #fff;
+  border-radius: 5px;
+  flex-grow: 1;
+  font-size: 26px;
+  overflow-y: scroll;
+  height: 34px;
+}
+.register-players .emoji-container img {
+  width: 30px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.register-players .emoji-container img:hover {
+  background-color: rgb(0, 200, 40);
+}
+.register-players .emoji-container .active {
+  background-color: rgb(0, 200, 40);
+}
+.register-players > div:last-child {
+  font-size: 13px;
+  position: absolute;
+  bottom: 20px;
+  cursor: pointer;
+  color: #0084cb;
+  font-weight: bold;
+}
+.register-players .close-btn::after, .register-players .close-btn::before {
+  content: "";
+  background-color: red;
+}
+.register-players button {
+  background: linear-gradient(45deg, #00133c, #018bd5);
+  color: white;
+  border: none;
+  width: -moz-fit-content;
+  width: fit-content;
+  padding: 8px 22px;
+  border-radius: 5px;
+  position: absolute;
+  bottom: 30px;
+  right: 98px;
+  cursor: pointer;
+}
+.register-players button:first-of-type {
+  bottom: 30px;
+  left: 98px;
+}
+@media (max-width: 450px) {
+  .register-players {
+    width: 95vw;
+    padding: 6px;
+  }
+  .register-players form {
+    width: 100%;
+  }
+  .register-players form .warning {
+    font-size: 10px;
+    padding: 4px;
+    width: 282px;
+    border: none;
+  }
+  .register-players > div:last-child {
+    bottom: 10px;
+  }
+  .register-players button {
+    right: 65px;
+  }
+  .register-players button:first-of-type {
+    left: 65px;
+  }
+}
+
+.sign-in-msg {
+  padding: 10px 19px;
+  background-color: rgb(255, 255, 255);
+  font-weight: bold;
+  position: absolute;
+  top: -65px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 16px;
+  text-transform: uppercase;
+  transition: 0.4s;
+  text-align: center;
+}
+
+.xo-popup {
+  border-radius: 4px;
+  display: flex;
+  position: absolute;
+  top: 26%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #000000;
+  padding: 4px;
+  gap: 4px;
+}
+.xo-popup::after {
+  content: "";
+  position: absolute;
+  border: 20px solid transparent;
+  border-right-width: 10px;
+  border-left-width: 10px;
+  border-top-color: #000000;
+  left: 25px;
+  bottom: -39px;
+}
+.xo-popup.first-player-clr {
+  background: linear-gradient(45deg, #00133c, #018bd5);
+}
+.xo-popup.first-player-clr::after {
+  border-top-color: #022c39;
+}
+.xo-popup.second-player-clr {
+  background: linear-gradient(45deg, #3c0000, #d50101);
+}
+.xo-popup.second-player-clr::after {
+  border-top-color: #5a0505;
+}
+
+.x-shape,
+.o-shape {
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  padding: 2px;
+  color: black;
+  background: #fff;
+  text-align: center;
+  font-size: 20px;
+  border-radius: 4px;
+}
+
+.game-end-popup {
+  width: 600px;
+  height: 216px;
+  background-image: url(../../assets/imgs/winner.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  color: white;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+.game-end-popup h2 {
+  line-height: 2;
+  font-size: 40px;
+}
+.game-end-popup button {
+  border: none;
+  font-weight: bold;
+  padding: 11px 20px;
+  border-radius: 5px;
+  background-color: #39dc33;
+  position: absolute;
+  left: 50%;
+  bottom: 10px;
+  transform: translateX(-50%);
+  cursor: pointer;
+}
+@media (max-width: 450px) {
+  .game-end-popup {
+    width: 95vw;
   }
 }/*# sourceMappingURL=style.css.map */

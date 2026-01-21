@@ -1,45 +1,74 @@
+/**
+ * Tic Tac Toe Game
+ * ----------------
+ * Vanilla JavaScript project.
+ *
+ * Features:
+ * - Sign In / Sign Up system
+ * - Local & Session Storage persistence
+ * - Match history & statistics
+ * - Two-player gameplay
+ *
+ * Author: Souhayl
+ */
+
+/*=================== Get Elements ==================*/
 const UI = {
-  boxes: document.querySelectorAll(".box"),
+  registerPlayers: document.querySelector(".register-players"),
+  registerCloseBtn: document.querySelector(".register-players .close-btn"),
+  registerCardHeader:  document.querySelector(".register-players h2"),
+  playerAccount: document.querySelector(".register-players .player"),
+  form: document.querySelector(".register-players form"),
+  authBtn: document.getElementById("authBtn"),
   emojiContainer: document.querySelector(".emoji-container"),
   emojis: document.querySelectorAll(".emoji-container img"),
-  playerAccount: document.querySelector(".start-game .player"),
-  form: document.querySelector(".start-game form"),
-  account: document.querySelector(".start-game > div:last-child"),
   resetBtn: document.getElementById("reset"),
   nextBtn: document.getElementById("next"),
-  firstPlayer: document.querySelector(".first-player .account"),
-  secondPlayer: document.querySelector(".second-player .account"),
-  startGame: document.querySelector(".start-game"),
-  warningNameMsg: document.querySelector(".warning.name"),
-  warningPassMsg: document.querySelector(".warning.password"),
-  registerCloseBtn: document.querySelector(".start-game .close-btn"),
-  cardInfoCloseBtn: document.querySelectorAll(".player-info .close-btn"),
-  leftArrow: document.querySelector(".blue"),
-  rightArrow: document.querySelector(".red"),
-  asides: document.querySelectorAll("aside .matches-container"),
-  asidesCloseBtns: document.querySelectorAll("aside .close-btn"),
   playerNameField: document.getElementById("name"),
   passwordField: document.getElementById("password"),
+  warningNameMsg: document.querySelector(".warning.name"),
+  warningPassMsg: document.querySelector(".warning.password"),
+  firstPlayer: document.querySelector(".first-player .account"),
+  secondPlayer: document.querySelector(".second-player .account"),
+  cardInfoCloseBtn: document.querySelectorAll(".player-info .close-btn"),
+  leftArrow: document.querySelector(".blue"),
+  start: document.querySelector(".start"),
+  rightArrow: document.querySelector(".red"),
+  boxes: document.querySelectorAll(".box"),
+  asides: document.querySelectorAll("aside .matches-container"),
+  asidesCloseBtns: document.querySelectorAll("aside .close-btn"),
   roundContainer: document.querySelector(".rounds"),
   firstPlayerScore: document.querySelector(".rounds .first-player-score"),
   secondPlayerScore: document.querySelector(".rounds .second-player-score"),
   roundNum: document.querySelector(".rounds .round-num span"),
   signOutBtns: document.querySelectorAll(".player-info button"),
+  signInMsg: document.querySelector(".sign-in-msg"),
+  totalMatchesContainers: document.querySelectorAll(".player-info div:nth-child(2)")
 };
-let player;
+
+/*=================== Game State ==================*/
+const gameState = {
+  isNameCorrect: false,
+  isPasswordCorrect: false,
+  isSignUp: true,
+  isFirstMove: true,
+  isFirstPlayerTurn: true,
+}
+
 /*=================== Data Module ==================*/
+let player;
 
 const DataModule = (function () {
   let localPlayerData = localStorage.PlayersData
     ? JSON.parse(localStorage.PlayersData)
     : [];
-  console.log(localPlayerData);
 
   if (sessionStorage.roundNum == null) {
     sessionStorage.roundNum = 1;
     sessionStorage.firstPlayerScore = 0;
     sessionStorage.secondPlayerScore = 0;
   }
+
   UI.roundNum.innerHTML = sessionStorage.roundNum;
   UI.secondPlayerScore.innerHTML = sessionStorage.secondPlayerScore;
   UI.firstPlayerScore.innerHTML = sessionStorage.firstPlayerScore;
@@ -65,11 +94,12 @@ const DataModule = (function () {
     }, {});
   }
 
-  function addLastSingInPlayerName() {
+  function addLastSignInPlayerName() {
     if (player == UI.firstPlayer) {
       localStorage.FirstPlayer = UI.playerNameField.value.trim();
       return;
     }
+
     localStorage.SecondPlayer = UI.playerNameField.value.trim();
   }
 
@@ -95,7 +125,7 @@ const DataModule = (function () {
       firstPlayerData.totalDraws++;
       secondPlayerData.totalDraws++;
       result = "Draw";
-    } else if (isFirstPlayerTurn) {
+    } else if (gameState.isFirstPlayerTurn) {
       firstPlayerData.totalWins++;
       secondPlayerData.totalLosses++;
       +UI.firstPlayerScore.innerHTML++;
@@ -113,7 +143,6 @@ const DataModule = (function () {
 
     registerMatchDetails([firstPlayerData, secondPlayerData, result]);
 
-    console.log("data", localPlayerData);
     localStorage.PlayersData = JSON.stringify(localPlayerData);
   }
 
@@ -151,32 +180,22 @@ const DataModule = (function () {
     addNewPlayer,
     getPlayerInfo,
     getMatchesGroupByDate,
-    addLastSingInPlayerName,
+    addLastSignInPlayerName,
     registerMatchesData,
   };
 })();
 
 /*=================== UI Module ==================*/
-let isNameCorrect = false;
-let isPasswordCorrect = false;
-let isSignUp = true;
-let isFirstMove = true;
-let isFirstPlayerTurn;
-
 const UIModule = (function () {
   // Get Last Signed In Players
   if (DataModule.doFirstPlayerSignedIn) {
     let playerData = DataModule.getPlayerInfo(localStorage.FirstPlayer);
-    if (playerData) {
-      createPlayerAccount(playerData, UI.firstPlayer);
-    }
+    if (playerData) createPlayerAccount(playerData, UI.firstPlayer);
   }
 
   if (DataModule.doSecondPlayerSignedIn) {
     let playerData = DataModule.getPlayerInfo(localStorage.SecondPlayer);
-    if (playerData) {
-      createPlayerAccount(playerData, UI.secondPlayer);
-    }
+    if (playerData) createPlayerAccount(playerData, UI.secondPlayer);
   }
 
   function createPlayerAccount(
@@ -198,14 +217,13 @@ const UIModule = (function () {
     playerContainer.innerHTML = "";
     playerContainer.append(profileImg, name);
     playerContainer.classList.add("full");
-    UI.startGame.classList.remove("active");
+    UI.registerPlayers.classList.remove("active");
     UI.resetBtn.click();
   }
 
   function showPlayerInfo(playerEle, playerClr, num) {
     if (playerEle.classList.contains("full")) {
       let playerInfoCard = playerEle.nextElementSibling;
-
       let totalMatchesContainer = playerInfoCard.querySelector(
         "[data-totalMatches]",
       );
@@ -214,14 +232,12 @@ const UIModule = (function () {
         playerInfoCard.querySelector("[data-totalLosses]");
       let totalDrawsContainer =
         playerInfoCard.querySelector("[data-totalDraws]");
-
       let playerData = DataModule.getPlayerInfo(
         playerEle.lastElementChild.innerHTML,
       );
 
       playerInfoCard.classList.add("active");
       playerInfoCard.firstElementChild.innerHTML = playerEle.innerHTML;
-
       totalMatchesContainer.innerHTML = playerData.totalMatches;
       totalWinsContainer.innerHTML = playerData.totalWins;
       totalLossesContainer.innerHTML = playerData.totalLosses;
@@ -231,7 +247,7 @@ const UIModule = (function () {
 
     player = playerEle;
     UI.playerAccount.lastElementChild.innerHTML = `Player ${num}`;
-    UI.startGame.classList.add("active");
+    UI.registerPlayers.classList.add("active");
     focusOnPlayer(playerClr);
   }
 
@@ -240,16 +256,15 @@ const UIModule = (function () {
     UI.form.style.background = playerClr;
     UI.nextBtn.style.background = playerClr;
     UI.resetBtn.style.background = playerClr;
-    UI.account.style.color = playerClr.match(/#\w+/gi)[1];
+    UI.authBtn.style.color = playerClr.match(/#\w+/gi)[1];
     UI.resetBtn.click();
   }
 
   function showAllMatches(ele) {
     let playerInfoCard = ele.closest(".player-info");
     let player = playerInfoCard.firstElementChild;
-    console.log(player);
-
     let asideNum = 1;
+
     UI.asides[0].parentElement.classList.remove("active");
     UI.asides[1].parentElement.classList.add("active");
 
@@ -268,15 +283,16 @@ const UIModule = (function () {
     let matchesByDate = DataModule.getMatchesGroupByDate(playerData);
 
     UI.asides[asideNum].innerHTML = "";
+
     for (let date in matchesByDate) {
       let matchesBox = document.createElement("div");
-      matchesBox.className = "matches-box";
 
       let data = `
-          <h3 class="date">${date}</h3>
-          ${createMatchesBoxes(matchesByDate[date], player)}
-        `;
+      <h3 class="date">${date}</h3>
+      ${createMatchesBoxes(matchesByDate[date], player)}
+      `;
 
+      matchesBox.className = "matches-box";
       matchesBox.innerHTML = data;
       UI.asides[asideNum].append(matchesBox);
     }
@@ -284,6 +300,7 @@ const UIModule = (function () {
 
   function createMatchesBoxes(matchesGroup, player) {
     let matches = "";
+
     matchesGroup.forEach((match) => {
       let playerScore = match.score.player;
       let opponentScore = match.score.opponent;
@@ -293,20 +310,20 @@ const UIModule = (function () {
         : "second-player-clr";
 
       let matchResultBox = `
-      <div class="match-result">
+        <div class="match-result">
 
-        ${player.outerHTML}
+          ${player.outerHTML}
 
-        <div class="result">
-          <div>${playerScore}</div> | <div>${opponentScore}</div>
-        </div>
+          <div class="result">
+            <div>${playerScore}</div> | <div>${opponentScore}</div>
+          </div>
 
-        <div class="account ${bgClr}">
-          <img src="${opponent.profile}" alt="face" />
-          <h3>${opponent.username}</h3>
-        </div>
+          <div class="account ${bgClr}">
+            <img src="${opponent.profile}" alt="face" />
+            <h3>${opponent.username}</h3>
+          </div>
 
-      </div>`;
+        </div>`;
 
       matches += matchResultBox;
     });
@@ -342,9 +359,9 @@ const UIModule = (function () {
   }
 
   function signUp() {
-    if (!(isPasswordCorrect && isNameCorrect)) return;
+    if (!(gameState.isPasswordCorrect && gameState.isNameCorrect)) return;
+
     let selectedImg = UI.emojiContainer.querySelector(".active");
-    console.log(selectedImg);
 
     if (DataModule.getPlayerInfo(UI.playerNameField.value.trim())) {
       UI.warningNameMsg.innerHTML = "The username is already used";
@@ -355,13 +372,13 @@ const UIModule = (function () {
     DataModule.addNewPlayer({
       username: UI.playerNameField.value.trim(),
       password: UI.passwordField.value.trim(),
-      profile: selectedImg?.src || "./assets/imgs/(1).png",
+      profile: selectedImg?.src || "./assets/imgs/(1).png"
     });
 
-    DataModule.addLastSingInPlayerName();
+    DataModule.addLastSignInPlayerName();
     createPlayerAccount();
-    isPasswordCorrect = false;
-    isNameCorrect = false;
+    gameState.isPasswordCorrect = false;
+    gameState.isNameCorrect = false;
 
     return false;
   }
@@ -374,6 +391,7 @@ const UIModule = (function () {
       UI.warningNameMsg.style.display = "block";
       return false;
     }
+
     UI.warningNameMsg.style.display = "none";
 
     if (playerData.password !== password.value.trim()) {
@@ -381,9 +399,10 @@ const UIModule = (function () {
       UI.warningPassMsg.style.display = "block";
       return false;
     }
+
     UI.warningPassMsg.style.display = "none";
 
-    DataModule.addLastSingInPlayerName();
+    DataModule.addLastSignInPlayerName();
     createPlayerAccount(playerData);
     return playerData;
   }
@@ -397,7 +416,7 @@ const UIModule = (function () {
   }
 
   function registerPlayer() {
-    if (isSignUp) {
+    if (gameState.isSignUp) {
       UIModule.signUp();
     } else UIModule.signIn();
 
@@ -408,33 +427,35 @@ const UIModule = (function () {
     let playerProfileName = UI.playerAccount.lastElementChild;
     playerProfileName.innerHTML = UI.playerNameField.value;
 
-    if (!isSignUp) return;
+    if (!gameState.isSignUp) return;
+
     let nameReg = /^[a-zA-Z]{2,}(?:\s{1,4}[a-zA-Z]{2,})*$/i;
     let playerName = UI.playerNameField.value.trim();
 
     if (nameReg.test(playerName)) {
       UI.warningNameMsg.style.display = "none";
-      isNameCorrect = true;
+      gameState.isNameCorrect = true;
     } else {
       UI.warningNameMsg.style.display = "block";
       UI.warningNameMsg.innerHTML =
         "Do not use any Spacial character (!,&,%,*,#...)";
-      isNameCorrect = false;
+      gameState.isNameCorrect = false;
     }
   }
 
   function checkPassword() {
-    if (!isSignUp) return;
+    if (!gameState.isSignUp) return;
+
     let passReg = /^(?=.*[a-z])(?=.*\d)(?=.*[^\w\s]).{8,20}$/i;
 
     if (passReg.test(UI.passwordField.value.trim())) {
       UI.warningPassMsg.style.display = "none";
-      isPasswordCorrect = true;
+      gameState.isPasswordCorrect = true;
     } else {
       UI.warningPassMsg.innerHTML =
         "Your password should contain (Number,Special character)";
       UI.warningPassMsg.style.display = "block";
-      isPasswordCorrect = false;
+      gameState.isPasswordCorrect = false;
     }
   }
 
@@ -456,20 +477,21 @@ const UIModule = (function () {
   function toggleSignInUp() {
     let profileEmoji = UI.form.lastElementChild;
 
-    isSignUp = !isSignUp;
+    gameState.isSignUp = !gameState.isSignUp;
 
     if (profileEmoji.classList.contains("active")) {
       UI.warningNameMsg.style.display = "none";
       UI.warningPassMsg.style.display = "none";
       profileEmoji.classList = "";
-      document.querySelector(".start-game h2").innerHTML = "Sign In";
-      UI.account.innerHTML = "Sign Up";
+      UI.registerCardHeader.innerHTML = "Sign In";
+      UI.authBtn.innerHTML = "Sign Up";
     } else {
       profileEmoji.classList = "active";
-      document.querySelector(".start-game h2").innerHTML = "Create Account";
-      UI.account.innerHTML = "Sign In";
+      UI.registerCardHeader.innerHTML = "Create Account";
+      UI.authBtn.innerHTML = "Sign In";
     }
   }
+
   function selectEmoji(icon) {
     UI.emojis.forEach((e) => (e.className = ""));
     icon.className = "active";
@@ -477,37 +499,37 @@ const UIModule = (function () {
   }
 
   function checkIfPlayersSignedIn(box) {
-    let signInMsg = document.querySelector(".sign-in-msg");
     let isItFull =
       UI.firstPlayer.classList.contains("full") &&
       UI.secondPlayer.classList.contains("full");
 
     if (!isItFull) {
-      signInMsg.style.top = "20px";
+      UI.signInMsg.style.top = "20px";
       return;
-    } else signInMsg.style.top = "-65px";
+    } else UI.signInMsg.style.top = "-65px";
 
     if (box.classList.contains("full")) return;
     createPopup(box);
   }
 
   function createPopup(box) {
-    const start = document.querySelector(".start");
     let XOpopup = document.querySelector(".xo-popup");
+
     XOpopup?.remove();
 
     let bgClr = "second-player-clr";
     let XContent = "❌";
     let OContent = "✔️";
-    start.innerHTML = "PLAY"
+    UI.start.innerHTML = "PLAY";
 
-    if (isFirstPlayerTurn) {
+    if (gameState.isFirstPlayerTurn) {
       bgClr = "first-player-clr";
     }
-    if (isFirstMove) {
+
+    if (gameState.isFirstMove) {
       XContent = "X";
       OContent = "O";
-      start.innerHTML = "START"
+      UI.start.innerHTML = "START";
     }
 
     let popup = `
@@ -516,10 +538,12 @@ const UIModule = (function () {
     <div class="o-shape">${OContent}</div>
     </div>
     `;
+
     box.insertAdjacentHTML("beforeend", popup);
 
     let XShape = document.querySelector(".x-shape");
     let OShape = document.querySelector(".o-shape");
+
     XShape.addEventListener("click", (e) => chooseShape(e, XShape));
     OShape.addEventListener("click", (e) => chooseShape(e, OShape));
   }
@@ -532,14 +556,14 @@ const UIModule = (function () {
 
     let box = XOBox.parentElement.parentElement;
 
-    if (isFirstMove) {
+    if (gameState.isFirstMove) {
       box.innerHTML = XOBox.innerHTML;
       choosePlayersShape(XOBox);
       changeArrowDirection();
 
       box.classList.add("full");
-      isFirstMove = !isFirstMove;
-      isFirstPlayerTurn = !isFirstPlayerTurn;
+      gameState.isFirstMove = !gameState.isFirstMove;
+      gameState.isFirstPlayerTurn = !gameState.isFirstPlayerTurn;
       return;
     }
 
@@ -551,9 +575,9 @@ const UIModule = (function () {
     changeArrowDirection();
 
     box.classList.add("full");
-    box.innerHTML = isFirstPlayerTurn ? firstPlayerShape : secondPlayerShape;
-    isItWinner(box.innerHTML);
-    isFirstPlayerTurn = !isFirstPlayerTurn;
+    box.innerHTML = gameState.isFirstPlayerTurn ? firstPlayerShape : secondPlayerShape;
+    checkWinner(box.innerHTML);
+    gameState.isFirstPlayerTurn = !gameState.isFirstPlayerTurn;
   }
 
   function chooseWhoWillStart() {
@@ -561,12 +585,12 @@ const UIModule = (function () {
     UI.leftArrow.style.opacity = 0;
     UI.rightArrow.style.opacity = 0;
     [UI.leftArrow, UI.rightArrow][randomNum].style.opacity = 1;
-    isFirstPlayerTurn = [true, false][randomNum];
+    gameState.isFirstPlayerTurn = [true, false][randomNum];
   }
   chooseWhoWillStart();
 
   function choosePlayersShape(XOBox) {
-    if (isFirstPlayerTurn) {
+    if (gameState.isFirstPlayerTurn) {
       firstPlayerShape = XOBox.classList.contains("x-shape") ? "X" : "O";
       secondPlayerShape = firstPlayerShape == "X" ? "O" : "X";
     } else {
@@ -579,7 +603,7 @@ const UIModule = (function () {
     UI.rightArrow.style.opacity = 0;
     UI.leftArrow.style.opacity = 1;
 
-    if (isFirstPlayerTurn) {
+    if (gameState.isFirstPlayerTurn) {
       UI.leftArrow.style.opacity = 0;
       UI.rightArrow.style.opacity = 1;
     }
@@ -596,12 +620,16 @@ const UIModule = (function () {
     [3, 5, 7],
   ];
 
-  function isItWinner(shape) {
+  function checkWinner(shape) {
     for (let option of options) {
+
       let counter = 0;
+
       for (let ind of option) {
+
         if (UI.boxes[ind - 1].textContent.toLowerCase() === shape.toLowerCase())
           counter++;
+
         if (counter == 3) {
           gameEndPopup(false);
           return;
@@ -610,16 +638,18 @@ const UIModule = (function () {
     }
 
     let fullBoxes = 0;
+
     UI.boxes.forEach((box) =>
       box.classList.contains("full") ? fullBoxes++ : "",
     );
+
     if (fullBoxes == 9) gameEndPopup(true);
   }
 
   function gameEndPopup(isItDraw) {
     let headerTxt = `The Winner is:`;
     let winner = (
-      isFirstPlayerTurn ? UI.firstPlayer : UI.secondPlayer
+      gameState.isFirstPlayerTurn ? UI.firstPlayer : UI.secondPlayer
     ).cloneNode(true).outerHTML;
 
     if (isItDraw) {
@@ -651,7 +681,8 @@ const UIModule = (function () {
       box.innerHTML = "";
       box.classList.remove("full");
     });
-    isFirstMove = !isFirstMove;
+
+    gameState.isFirstMove = !gameState.isFirstMove;
     ele.parentElement.remove();
   }
 
@@ -682,6 +713,7 @@ const UIModule = (function () {
 const EventsModule = (function () {
   const firstClr = "linear-gradient(45deg, #00133c, #018bd5)";
   const secondClr = "linear-gradient(45deg, #3c0000, #d50101)";
+
   UI.firstPlayer.addEventListener("click", () =>
     UIModule.showPlayerInfo(UI.firstPlayer, firstClr, "One"),
   );
@@ -690,11 +722,7 @@ const EventsModule = (function () {
     UIModule.showPlayerInfo(UI.secondPlayer, secondClr, "Two"),
   );
 
-  let totalMatchesContainers = document.querySelectorAll(
-    ".player-info div:nth-child(2)",
-  );
-
-  totalMatchesContainers.forEach((ele) => {
+  UI.totalMatchesContainers.forEach((ele) => {
     ele.addEventListener("click", (ele) => UIModule.showAllMatches(ele.target));
   });
 
@@ -703,7 +731,7 @@ const EventsModule = (function () {
   });
 
   UI.registerCloseBtn.addEventListener("click", () => {
-    UI.startGame.classList.remove("active");
+    UI.registerPlayers.classList.remove("active");
     UI.resetBtn.click();
   });
 
@@ -720,7 +748,8 @@ const EventsModule = (function () {
   UI.playerNameField.addEventListener("input", UIModule.checkUsername);
   UI.passwordField.addEventListener("input", UIModule.checkPassword);
 
-  UI.account.addEventListener("click", UIModule.toggleSignInUp);
+  UI.authBtn.addEventListener("click", UIModule.toggleSignInUp);
+
   UI.emojis.forEach((icon) => {
     icon.addEventListener("click", () => UIModule.selectEmoji(icon));
   });
@@ -733,6 +762,3 @@ const EventsModule = (function () {
   });
   document.addEventListener("click", (e) => UIModule.playAgain(e.target));
 })();
-
-// pwa
-

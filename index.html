@@ -1,22 +1,157 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="./assets/style/style.css" />
-    <link rel="manifest" href="./manifest.json">
-    <meta name="theme-color" content="#000000">
+    <link rel="stylesheet" href="./assets/style/main.css" />
     <title>XO Game</title>
   </head>
   <body>
+    <!-- Overlay Layer -->
     <div class="overlay"></div>
-    <div class="start-game">
+
+    <!-- Heading -->
+    <h1>XO Game</h1>
+
+    <!-- Players Acount -->
+    <div class="players-account">
+      <div class="first-player">
+        <div class="account"><span>+</span></div>
+        <div class="player-info" data-first>
+          <div class="account">
+            <img src="http://127.0.0.1:5500/XO-Game/imgs/(8).png" />
+            <h3>Souhayl Taiss</h3>
+          </div>
+
+          <div title="open">
+            <span>Total Matches</span>
+            <span> : </span>
+            <span data-totalMatches>8</span>
+          </div>
+
+          <div>
+            <span>Total Wins</span>
+            <span> : </span>
+            <span data-totalWins>6</span>
+          </div>
+
+          <div>
+            <span>Total Losses</span>
+            <span> : </span>
+            <span data-totalLosses>2</span>
+          </div>
+
+          <div>
+            <span>Total Draws</span>
+            <span> : </span>
+            <span data-totalDraws>0</span>
+          </div>
+
+          <button>Sing Out</button>
+          <div class="close-btn"></div>
+        </div>
+      </div>
+
+      <!-- Show Player Turn -->
+      <div class="start-playing">
+        <div class="blue"></div>
+        <span class="start">START</span>
+        <div class="red"></div>
+      </div>
+
+      <div class="second-player">
+        <div class="account second-player-clr"><span>+</span></div>
+        <div class="player-info">
+          <div class="account second-player-clr">
+            <img src="http://127.0.0.1:5500/XO-Game/imgs/(8).png" />
+            <h3>Souhayl Taiss</h3>
+          </div>
+
+          <div title="open">
+            <span>Total Matches</span>
+            <span> : </span>
+            <span data-totalMatches>8</span>
+          </div>
+
+          <div>
+            <span>Total Wins</span>
+            <span> : </span>
+            <span data-totalWins>6</span>
+          </div>
+
+          <div>
+            <span>Total Losses</span>
+            <span> : </span>
+            <span data-totalLosses>2</span>
+          </div>
+
+          <div>
+            <span>Total Draws</span>
+            <span> : </span>
+            <span data-totalDraws>0</span>
+          </div>
+
+          <button>Sing Out</button>
+          <div class="close-btn"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Boxes -->
+    <div class="container">
+      <div class="box"></div>
+      <div class="box"></div>
+      <div class="box"></div>
+      <div class="box"></div>
+      <div class="box"></div>
+      <div class="box"></div>
+      <div class="box"></div>
+      <div class="box"></div>
+      <div class="box"></div>
+    </div>
+
+    <!-- Rounds Details -->
+    <div class="rounds">
+      <div>
+        <div class="account"><span>?</span></div>
+        <div class="first-player-score">0</div>
+      </div>
+      <div>
+        <div class="start">VS</div>
+        <div class="round-num">Round <span>1</span></div>
+      </div>
+      <div>
+        <div class="account"><span>?</span></div>
+        <div class="second-player-score">0</div>
+      </div>
+    </div>
+
+    <!-- Aside To Show Player Matches -->
+    <aside class="left-slider">
+      <h2>All Matches</h2>
       <div class="close-btn"></div>
+      <div class="matches-container"></div>
+    </aside>
+
+    <!-- Right Aside -->
+    <aside class="right-slider">
+      <h2>All Matches</h2>
+      <div class="close-btn"></div>
+      <div class="matches-container"></div>
+    </aside>
+
+    <!-- Signed In Msg -->
+    <div class="sign-in-msg">Please Sign In To Play</div>
+
+    <!-- Registering Players -->
+    <div class="register-players">
       <h2>Create Account</h2>
+
       <div class="player">
         <img src="./assets/imgs/(1).png" alt="face" />
         <h3>player one</h3>
       </div>
+
       <form action="#">
         <div>
           <label for="name">Name : </label>
@@ -25,6 +160,7 @@
             >Do not use any Spacial character (!,&,%,*,#...)</span
           >
         </div>
+
         <div>
           <label for="password">Password : </label>
           <input
@@ -32,12 +168,13 @@
             name="password"
             id="password"
             placeholder="Your Password"
-            />
-            <span class="warning password"
+          />
+          <span class="warning password"
             >Your password should contain (Big character,Number,Special
             character)</span
           >
         </div>
+
         <div class="active">
           <p>Profile :</p>
           <div class="emoji-container">
@@ -53,129 +190,15 @@
           </div>
         </div>
       </form>
+
+      <div class="close-btn"></div>
+
       <button id="reset">Reset</button>
       <button id="next">Next</button>
-      <div>Sign In</div>
+      <div id="authBtn">Sign In</div>
     </div>
-      <h1>XO Game</h1>
-    <div class="players-account">
-      <div class="first-player">
-        <div class="account" ><span>+</span></div>
-        <div class="player-info" data-first>
-          <div class="account">
-            <img src="http://127.0.0.1:5500/XO-Game/imgs/(8).png" />
-            <h3>Souhayl Taiss</h3>
-          </div>
-          <div title="open">
-            <span>Total Matches</span>
-            <span> : </span>
-            <span data-totalMatches>8</span>
-          </div>
-          <div>
-            <span>Total Wins</span>
-            <span> : </span>
-            <span data-totalWins>6</span>
-          </div>
-          <div>
-            <span>Total Losses</span>
-            <span> : </span>
-            <span data-totalLosses>2</span>
-          </div>
-          <div>
-            <span>Total Draws</span>
-            <span> : </span>
-            <span data-totalDraws>0</span>
-          </div>
-          <button>Sing Out</button>
-          <div class="close-btn"></div>
-        </div>
-      </div>
 
-      <div class="start-playing">
-        <div class="blue"></div>
-        <span class="start">START</span>
-        <div class="red"></div>
-      </div>
-
-      <div class="second-player">
-        <div class="account second-player-clr"><span>+</span></div>
-        <div class="player-info">
-          <div class="account second-player-clr">
-            <img src="http://127.0.0.1:5500/XO-Game/imgs/(8).png" />
-            <h3>Souhayl Taiss</h3>
-          </div>
-      <div title="open">
-            <span>Total Matches</span>
-            <span> : </span>
-            <span data-totalMatches>8</span>
-          </div>
-          <div>
-            <span>Total Wins</span>
-            <span> : </span>
-            <span data-totalWins>6</span>
-          </div>
-          <div>
-            <span>Total Losses</span>
-            <span> : </span>
-            <span data-totalLosses>2</span>
-          </div>
-          <div>
-            <span>Total Draws</span>
-            <span> : </span>
-            <span data-totalDraws>0</span>
-          </div>
-          <button>Sing Out</button>
-          <div class="close-btn"></div>
-        </div>
-      </div>
-    </div>
-    <div class="container">
-      <div class="box"></div>
-      <div class="box"></div>
-      <div class="box"></div>
-      <div class="box"></div>
-      <div class="box"></div>
-      <div class="box"></div>
-      <div class="box"></div>
-      <div class="box"></div>
-      <div class="box"></div>
-    </div>
-    <div class="sign-in-msg">Please Sign In To Play</div>
-
-    <div class="rounds">
-      <div>
-        <div class="account"><span>?</span></div>
-        <div class="first-player-score">0</div>
-      </div>
-      <div>
-        <div class="start">VS</div>
-        <div class="round-num">Round <span>1</span></div>
-      </div>
-      <div>
-        <div class="account"><span>?</span></div>
-        <div class="second-player-score">0</div>
-      </div>
-    </div>
-    <aside class="left-slider">
-      <h2>All Matches</h2>
-      <div class="close-btn"></div>
-      <div class="matches-container"></div>
-    </aside>
-
-    <aside class="right-slider">
-      <h2>All Matches</h2>
-      <div class="close-btn"></div>
-      <div class="matches-container"></div>
-    </aside>
-    <script src="./assets/script/script.js"></script>
-    <script>
-      if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js')
-      .then(reg => console.log('SW registered', reg))
-      .catch(err => console.log('SW registration failed', err));
-  });
-}
-    </script>
+    <!-- Script -->
+    <script src="./assets/script/main.js"></script>
   </body>
 </html>
