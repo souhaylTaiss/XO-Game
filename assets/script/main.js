@@ -429,7 +429,7 @@ const UIModule = (function () {
 
     if (!gameState.isSignUp) return;
 
-    let nameReg = /^[a-zA-Z]{2,}(?:\s{1,4}[a-zA-Z]{2,})*$/i;
+    let nameReg = /^[a-zA-Z]{2,}(?:\s{1,4}[a-zA-Z]{1,})*$/i;
     let playerName = UI.playerNameField.value.trim();
 
     if (nameReg.test(playerName)) {
